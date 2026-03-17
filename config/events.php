@@ -2,7 +2,8 @@
 
 return [
     'subscribers' => [
-        \App\Listeners\LogHttpRequestsSubscriber::class,
+        \App\Events\LogHttpRequestsSubscriber::class,
+        \App\Events\UserRegisteredSubscriber::class,
     ],
 ];
 

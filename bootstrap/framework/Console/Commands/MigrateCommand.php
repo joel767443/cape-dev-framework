@@ -34,7 +34,7 @@ final class MigrateCommand extends Command
         $dryRun = (bool) $input->getOption('dry-run');
 
         $repo = new MigrationRepository($this->db);
-        $loader = new MigrationLoader(Paths::appPath($this->rootPath, 'Database/Migrations'));
+        $loader = new MigrationLoader(Paths::databasePath($this->rootPath, 'migrations'));
         $available = $loader->discover();
 
         $migrator = new Migrator($this->db, $repo);

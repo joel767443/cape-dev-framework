@@ -40,7 +40,7 @@ final class MakeMigrationCommand extends Command
 
         $namespace = 'App\\Database\\Migrations';
         $file = "{$timestamp}_{$class}.php";
-        $path = Paths::appPath($this->writer->rootPath(), 'Database/Migrations' . DIRECTORY_SEPARATOR . $file);
+        $path = Paths::databasePath($this->writer->rootPath(), 'migrations' . DIRECTORY_SEPARATOR . $file);
 
         $code = $this->render($namespace, $class);
         $this->writer->writeFile($path, $code, $force);

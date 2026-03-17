@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Requests;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraint;

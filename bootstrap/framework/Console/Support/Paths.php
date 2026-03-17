@@ -10,5 +10,12 @@ final class Paths
         $relative = ltrim($relative, DIRECTORY_SEPARATOR);
         return $relative === '' ? $base : ($base . DIRECTORY_SEPARATOR . $relative);
     }
+
+    public static function databasePath(string $rootPath, string $relative = ''): string
+    {
+        $base = rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'database';
+        $relative = ltrim($relative, DIRECTORY_SEPARATOR);
+        return $relative === '' ? $base : ($base . DIRECTORY_SEPARATOR . $relative);
+    }
 }
 

@@ -6,12 +6,14 @@
 
 use WebApp\Application;
 
-require_once "autoload.php";
-
-$app = new Application(dirname(__DIR__));
+/** @var Application $app */
+$app = require dirname(__DIR__) . '/bootstrap/app.php';
 
 // Load routes.
 $router = $app->router;
-require __DIR__ . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . 'api.php';
+require dirname(__DIR__) . '/routes/api.php';
+if (is_file(dirname(__DIR__) . '/routes/web.php')) {
+    require dirname(__DIR__) . '/routes/web.php';
+}
 
 $app->run();

@@ -4,7 +4,7 @@ This codebase uses **Symfony Validator + FormRequest** for request validation.
 
 ## FormRequest validation (recommended)
 
-- Base class: `App\Http\Requests\FormRequest`
+- Base class: `App\Requests\FormRequest`
 - Validator wrapper: `WebApp\Validation\RequestValidator`
 - Validator engine: `symfony/validator`
 

@@ -18,7 +18,7 @@ use WebApp\Events\Http\ControllerResolved;
 use WebApp\Events\Http\RequestReceived;
 use WebApp\Events\Http\ResponseReady;
 use WebApp\Validation\RequestValidator;
-use App\Http\Requests\FormRequest;
+use App\Requests\FormRequest;
 
 final class Kernel
 {

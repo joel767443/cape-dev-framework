@@ -38,7 +38,7 @@ php bin/console migrate
 
 ### Validation changes (FormRequest)
 
-- If controller methods start type-hinting `App\Http\Requests\FormRequest` subclasses, remember they will be auto-validated by the kernel and may now return 422 errors for invalid payloads.
+- If controller methods start type-hinting `App\Requests\FormRequest` subclasses, remember they will be auto-validated by the kernel and may now return 422 errors for invalid payloads.
 
 ### Frontend API base URL changes
 

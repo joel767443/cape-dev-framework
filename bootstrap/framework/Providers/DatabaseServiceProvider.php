@@ -26,9 +26,17 @@ final class DatabaseServiceProvider implements ServiceProviderInterface
                     $dbPath = (string) ($conn['database'] ?? '');
                     if ($dbPath === '') {
                         // Keep existing default location.
-                        $dbPath = $root . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Database' . DIRECTORY_SEPARATOR . 'cape-dev.sqlite';
+                        $dbPath = $root . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'cape-dev.sqlite';
                     } elseif ($dbPath[0] !== DIRECTORY_SEPARATOR && !preg_match('/^[A-Za-z]:[\\\\\\/]/', $dbPath)) {
                         $dbPath = $root . DIRECTORY_SEPARATOR . ltrim($dbPath, DIRECTORY_SEPARATOR);
+                    }
+
+                    $dir = dirname($dbPath);
+                    if (!is_dir($dir)) {
+                        @mkdir($dir, 0777, true);
+                    }
+                    if (!is_file($dbPath)) {
+                        @touch($dbPath);
                     }
                     $conn['database'] = $dbPath;
                 }

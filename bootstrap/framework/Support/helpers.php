@@ -64,3 +64,16 @@ if (!function_exists('uuid')) {
     }
 }
 
+if (!function_exists('base_path')) {
+    function base_path(string $path = ''): string
+    {
+        $root = (string) (\WebApp\Application::$ROOT_PATH ?? '');
+        if ($root === '') {
+            $root = getcwd() ?: '';
+        }
+
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
+        return $path === '' ? $root : $root . DIRECTORY_SEPARATOR . $path;
+    }
+}
+

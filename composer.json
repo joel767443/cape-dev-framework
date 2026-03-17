@@ -26,11 +26,11 @@
   },
   "autoload": {
     "psr-4": {
-      "WebApp\\": "src/",
+      "WebApp\\": "bootstrap/framework/",
       "App\\": "app/"
     },
     "files": [
-      "src/Support/helpers.php"
+      "bootstrap/framework/Support/helpers.php"
     ]
   },
   "config": {

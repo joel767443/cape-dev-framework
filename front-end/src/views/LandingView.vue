@@ -3,13 +3,7 @@ import config from '../config.js'
 
 const installSnippet = `# backend
 composer install
-php -S localhost:8001 index.php
-
-# frontend
-cd front-end
-npm install
-cp src/config.example.js src/config.js
-npm run dev`
+php run dev`
 </script>
 
 <template>
@@ -17,7 +11,10 @@ npm run dev`
     <div class="row align-items-center g-4">
       <div class="col-12 col-lg-7">
         <div class="mb-3">
-          <span class="badge text-bg-dark">cape-dev PHP Framework</span>
+          <div class="d-flex align-items-center gap-2">
+            <img src="/logo.png" alt="cape-dev logo" width="28" height="28" style="border-radius: 6px" />
+            <span class="badge text-bg-dark">cape-dev PHP Framework</span>
+          </div>
         </div>
 
         <h1 class="display-5 fw-semibold mb-3">

@@ -7,7 +7,7 @@ Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI
 - **Routing**: Symfony Routing (`symfony/routing`) via `routes/api.php` + `src/Http/Kernel.php`
 - **HTTP layer**: Symfony HttpFoundation (`symfony/http-foundation`)
 - **DI container**: PHP-DI (`php-di/php-di`) + service providers (`src/Providers/*`)
-- **Validation**: Symfony Validator (`symfony/validator`) + `App\Http\Requests\FormRequest`
+- **Validation**: Symfony Validator (`symfony/validator`) + `App\Requests\FormRequest`
 - **Database**: Eloquent/Illuminate Database (`illuminate/database`) + migrations (`php bin/console migrate`)
 - **ORM (optional)**: Doctrine ORM (`doctrine/orm`) with `php bin/console doctrine:schema:update`
 - **Outbound HTTP**: Guzzle (`guzzlehttp/guzzle`) via `WebApp\Http\Client\HttpClient`
@@ -42,7 +42,7 @@ php run dev
 composer install
 
 # start HTTP server (from repo root)
-php -S localhost:8001 index.php
+php -S localhost:8001 public/index.php
 ```
 
 ### Frontend (Vue)
@@ -71,10 +71,10 @@ Routes are defined in `routes/api.php`.
 
 ## Backend architecture (source of truth)
 
-- **Entrypoint**: `index.php` loads routes from `routes/api.php` and runs `WebApp\Application`.
+- **Entrypoint**: `public/index.php` loads routes from `routes/api.php` (and `routes/web.php`) and runs `WebApp\Application`.
 - **HTTP kernel**: `src/Http/Kernel.php` matches routes (Symfony Routing), runs middleware, invokes controllers, and enforces that controllers return a `Symfony\Component\HttpFoundation\Response`.
 - **Middleware**: global middleware is wired in `src/Application.php`. Route middleware is attached per route (or via `Router::group()`) and resolved via `src/Http/Middleware/MiddlewareRegistry.php`.
-- **Validation**: request validation is Symfony Validator via `App\Http\Requests\FormRequest` + `WebApp\Validation\RequestValidator`. If a controller action type-hints a `FormRequest`, it is automatically validated by the kernel before the controller runs.
+- **Validation**: request validation is Symfony Validator via `App\Requests\FormRequest` + `WebApp\Validation\RequestValidator`. If a controller action type-hints a `FormRequest`, it is automatically validated by the kernel before the controller runs.
 - **Database**: configured in `config/database.php` and wired via `src/Providers/DatabaseServiceProvider.php` (Illuminate Database / Eloquent).
 - **Migrations**: discovered in `app/Database/Migrations` and run via `php bin/console migrate`.
 

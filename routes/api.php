@@ -8,6 +8,8 @@ use WebApp\Http\Controllers\DocsController;
  */
 
 $router->post('/api/auth/token', [AuthController::class, 'token']);
+$router->post('/api/auth/register', [AuthController::class, 'register']);
+$router->post('/api/auth/login', [AuthController::class, 'login']);
 
 $router->add('GET', '/api/secure/ping', [AuthController::class, 'ping'], ['middleware' => ['auth_jwt']]);
 

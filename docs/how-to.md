@@ -91,7 +91,7 @@ The kernel (`src/Http/Kernel.php`) can inject:
 
 - `Symfony\Component\HttpFoundation\Request`
 - any DI-resolvable service (via PHP-DI)
-- `App\Http\Requests\FormRequest` subclasses (auto-validated before your controller runs)
+- `App\Requests\FormRequest` subclasses (auto-validated before your controller runs)
 
 ## Models
 
@@ -142,6 +142,7 @@ php run doctrine:schema:update --force
 Base request:
 
 - `app/Http/Requests/FormRequest.php`
+- (new structure) `app/Requests/FormRequest.php`
 
 Generate a request:
 

@@ -1,7 +1,7 @@
 # Validation
 
-Validation uses Symfony Validator + `App\Http\Requests\FormRequest`.
+Validation uses Symfony Validator + `App\Requests\FormRequest`.
 
 - `WebApp\Validation\RequestValidator`
-- `App\Http\Requests\FormRequest`
+- `App\Requests\FormRequest`
 

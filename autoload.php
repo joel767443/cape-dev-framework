@@ -14,7 +14,7 @@ spl_autoload_register(function (string $class_name): void {
 
     // Map the namespace to the src folder
     $namespace_mapping = [
-        'WebApp\\' => '/src',
+        'WebApp\\' => '/bootstrap/framework',
         'App\\' => '/app',
     ];
 

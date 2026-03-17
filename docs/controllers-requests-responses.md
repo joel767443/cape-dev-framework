@@ -11,7 +11,7 @@ Routes bind controllers using `[ControllerClass::class, 'method']` in `routes/ap
 When the kernel invokes a controller (`src/Http/Kernel.php`), it resolves arguments in this order:
 
 - If a parameter type-hints `Symfony\Component\HttpFoundation\Request`, it receives the current request.
-- If a parameter type-hints a subclass of `App\Http\Requests\FormRequest`, it will be:
+- If a parameter type-hints a subclass of `App\Requests\FormRequest`, it will be:
   - instantiated (via the DI container if available)
   - bound to the current request (`FormRequest::setRequest()`)
   - validated (see “Validation”)

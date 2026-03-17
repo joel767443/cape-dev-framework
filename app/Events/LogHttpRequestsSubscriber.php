@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Events;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

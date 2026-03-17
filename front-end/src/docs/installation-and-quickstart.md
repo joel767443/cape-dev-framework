@@ -12,24 +12,7 @@ From the repo root:
 
 ```bash
 composer install
-php -S localhost:8001 index.php
+php run dev
 ```
-
-## Frontend (Vue 3 + Vite)
-
-```bash
-cd front-end
-npm install
-cp src/config.example.js src/config.js
-```
-
-Set `apiBaseUrl` in `front-end/src/config.js` to:
-
-- `http://localhost:8001/api`
-
-Then run:
-
-```bash
-npm run dev
-```
+This will start both the backend (port **8001**) and frontend (Vite, port **5173**).
 

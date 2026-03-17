@@ -2,7 +2,12 @@
 
 namespace WebApp\Http\Controllers;
 
-use App\Http\Requests\ValidateExampleRequest;
+use App\Events\UserRegistered;
+use App\Models\User;
+use App\Requests\LoginRequest;
+use App\Requests\RegisterRequest;
+use App\Requests\ValidateExampleRequest;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +53,88 @@ final class AuthController
             'message' => 'OK',
             'data' => [
                 'auth' => $request->attributes->get('auth'),
+            ],
+        ], 200);
+    }
+
+    public function register(RegisterRequest $request, JwtService $jwt, EventDispatcherInterface $events): Response
+    {
+        $data = $request->validated();
+
+        $email = strtolower(trim((string) ($data['email'] ?? '')));
+        $password = (string) ($data['password'] ?? '');
+
+        if ($email === '' || $password === '') {
+            throw new HttpException(422, 'Validation failed');
+        }
+
+        $existing = User::query()->where('email', $email)->first();
+        if ($existing) {
+            throw new HttpException(422, 'Validation failed', [
+                'errors' => ['email' => ['Email is already registered.']],
+            ]);
+        }
+
+        $user = new User();
+        $user->email = $email;
+        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->save();
+
+        $events->dispatch(new UserRegistered($user));
+
+        $token = $jwt->issue([
+            'sub' => (string) $user->getKey(),
+            'email' => (string) $user->email,
+            'role' => 'user',
+        ]);
+
+        return new JsonResponse([
+            'success' => true,
+            'code' => 201,
+            'message' => 'Registered',
+            'data' => [
+                'token' => $token,
+                'user' => [
+                    'id' => (string) $user->getKey(),
+                    'email' => (string) $user->email,
+                ],
+            ],
+        ], 201);
+    }
+
+    public function login(LoginRequest $request, JwtService $jwt): Response
+    {
+        $data = $request->validated();
+
+        $email = strtolower(trim((string) ($data['email'] ?? '')));
+        $password = (string) ($data['password'] ?? '');
+
+        if ($email === '' || $password === '') {
+            throw new HttpException(422, 'Validation failed');
+        }
+
+        /** @var User|null $user */
+        $user = User::query()->where('email', $email)->first();
+        if (!$user || !is_string($user->password) || !password_verify($password, $user->password)) {
+            throw new HttpException(401, 'Invalid credentials');
+        }
+
+        $token = $jwt->issue([
+            'sub' => (string) $user->getKey(),
+            'email' => (string) $user->email,
+            'role' => 'user',
+        ]);
+
+        return new JsonResponse([
+            'success' => true,
+            'code' => 200,
+            'message' => 'OK',
+            'data' => [
+                'token' => $token,
+                'user' => [
+                    'id' => (string) $user->getKey(),
+                    'email' => (string) $user->email,
+                ],
             ],
         ], 200);
     }
