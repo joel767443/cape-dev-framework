@@ -6,6 +6,8 @@
 
 namespace WebApp;
 
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use WebApp\Http\Requests\Request;
 use WebApp\Http\Responses\Response;
 
@@ -24,9 +26,9 @@ class Router
     public Response $response;
 
     /**
-     * @var array
+     * @var RouteCollection
      */
-    protected array $routes = [];
+    protected RouteCollection $routes;
 
     /**
      * @param Request $request
@@ -36,6 +38,7 @@ class Router
     {
         $this->request = $request;
         $this->response = $response;
+        $this->routes = new RouteCollection();
     }
 
     /**
@@ -45,7 +48,7 @@ class Router
      */
     public function get(string $path, array $callback)
     {
-        $this->routes['get'][$path] = $callback;
+        $this->addRoute($path, $callback, ['GET']);
     }
 
     /**
@@ -55,53 +58,48 @@ class Router
      */
     public function post(string $path, array $callback): void
     {
-        $this->routes['post'][$path] = $callback;
+        $this->addRoute($path, $callback, ['POST']);
     }
 
     /**
-     * @return array|mixed
+     * @return RouteCollection
      */
-    public function resolve()
+    public function getRouteCollection(): RouteCollection
     {
-        $path = $this->request->getPath(); // URI - e.g., /product/12
-        $method = $this->request->method(); // GET, POST, etc.
-        $callback = $this->routeExist($method, $path);
-
-        if ($callback === false) {
-            return $this->response->jsonResponse("URL $path Not found", 404, [], false);
-        }
-
-        // Instantiate the controller for call_user_func (PHP 8 and above)
-        if (is_array($callback)) {
-            [$controllerClass, $method] = $callback;
-
-            if (!$this->functionExists($callback)) {
-                return $this->response->jsonResponse("Method $method Not found", 404, [], false);
-            }
-
-            $controllerInstance = new $controllerClass($this->response);
-            return call_user_func([$controllerInstance, $method], $this->request);
-        }
-
-        return call_user_func($callback, $this->request);
+        return $this->routes;
     }
 
     /**
-     * @param string $method
+     * Register a route. Controller is stored as "Class::method".
+     *
      * @param string $path
-     * @return false|string
+     * @param array{0: class-string, 1: string} $callback
+     * @param string[] $methods
+     * @return void
      */
-    public function routeExist(string $method, string $path)
+    protected function addRoute(string $path, array $callback, array $methods): void
     {
-        return $this->routes[$method][$path] ?? false;
+        [$controllerClass, $method] = $callback;
+        $controller = $controllerClass . '::' . $method;
+
+        $route = new Route(
+            $path,
+            ['_controller' => $controller],
+            [],
+            [],
+            '',
+            [],
+            $methods
+        );
+
+        $routeName = $this->routeName($methods[0] ?? 'ANY', $path);
+        $this->routes->add($routeName, $route);
     }
 
-    /**
-     * @param array $callback
-     * @return bool
-     */
-    private function functionExists(array $callback): bool
+    protected function routeName(string $method, string $path): string
     {
-        return method_exists($callback[0], $callback[1]);
+        $method = strtolower($method);
+        $name = preg_replace('/[^A-Za-z0-9_]+/', '_', trim($path, '/')) ?: 'root';
+        return $method . '_' . trim($name, '_');
     }
 }

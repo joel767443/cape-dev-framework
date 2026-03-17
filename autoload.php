@@ -4,6 +4,13 @@
  * @author Yoweli Kachala <yowelikachala@gmail.com>
  */
 
+// Prefer Composer autoload (Symfony components, PSR-4).
+$composerAutoload = __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (is_file($composerAutoload)) {
+    require_once $composerAutoload;
+    return;
+}
+
 spl_autoload_register(function (string $class_name): void {
 
     // Map the namespace to the src folder
