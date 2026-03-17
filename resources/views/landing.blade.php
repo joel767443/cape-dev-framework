@@ -1,37 +1,15 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>cape-dev PHP Framework</title>
+@extends('layouts.app')
 
-    <link rel="icon" href="/logo.png" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
+@section('title', 'cape-dev PHP Framework')
 
-    <style>
-      pre {
-        background: #0b1020;
-        color: #e8edf6;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        overflow: auto;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container mt-3">
+@section('content')
       <div class="py-4 py-lg-5">
         <div class="row align-items-center g-4">
           <div class="col-12 col-lg-7">
             <div class="mb-3">
               <div class="d-flex align-items-center gap-2">
                 <img src="/logo.png" alt="cape-dev logo" width="28" height="28" style="border-radius: 6px" />
-                <span class="badge text-bg-dark">cape-dev PHP Framework</span>
+                <span class="badge text-bg-dark">Cape Dev PHP Framework</span>
               </div>
             </div>
 
@@ -45,6 +23,7 @@
 
             <div class="d-flex flex-wrap gap-2">
               <a class="btn btn-outline-secondary btn-lg" href="/docs">Read docs</a>
+              <a class="btn btn-dark btn-lg" href="/docs/installation-and-quickstart">How to get started</a>
             </div>
           </div>
 
@@ -59,6 +38,63 @@
 composer install
 php run dev</code></pre>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-5" />
+
+        <div class="row g-4 align-items-start">
+          <div class="col-12 col-lg-6">
+            <h2 class="h4 mb-3">How to</h2>
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <ol class="mb-3">
+                  <li><code>composer install</code></li>
+                  <li><code>php run dev</code></li>
+                  <li>Open <code>/</code> for the landing page, and <code>/docs</code> for docs.</li>
+                </ol>
+
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-outline-secondary" href="/docs/how-to">Backend developer guide</a>
+                  <a class="btn btn-outline-secondary" href="/docs/routing-and-middleware">Routing + middleware</a>
+                  <a class="btn btn-outline-secondary" href="/docs/controllers-requests-responses">Controllers + requests</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <h2 class="h4 mb-3">Relevant docs</h2>
+            <div class="list-group shadow-sm">
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/installation-and-quickstart">
+                <span>Installation + quickstart</span>
+                <span class="text-secondary small">/docs/installation-and-quickstart</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/routing-and-middleware">
+                <span>Routing + middleware</span>
+                <span class="text-secondary small">/docs/routing-and-middleware</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/controllers-requests-responses">
+                <span>Controllers / requests / responses</span>
+                <span class="text-secondary small">/docs/controllers-requests-responses</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/validation">
+                <span>Validation</span>
+                <span class="text-secondary small">/docs/validation</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/database-and-migrations">
+                <span>Database + migrations</span>
+                <span class="text-secondary small">/docs/database-and-migrations</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/auth">
+                <span>Authentication (JWT)</span>
+                <span class="text-secondary small">/docs/auth</span>
+              </a>
+              <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/docs/queue">
+                <span>Queue</span>
+                <span class="text-secondary small">/docs/queue</span>
+              </a>
             </div>
           </div>
         </div>
@@ -104,7 +140,5 @@ php run dev</code></pre>
           <div>Tip: use <code>php run route:list</code> to see backend routes.</div>
         </div>
       </div>
-    </div>
-  </body>
-</html>
+@endsection
 

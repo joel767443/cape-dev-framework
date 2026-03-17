@@ -8,7 +8,7 @@ From the repo root:
 
 ```bash
 composer install
-php -S localhost:8001 public/index.php
+php -S localhost:8001 -t public public/index.php
 ```
 
 Or start the backend dev server:

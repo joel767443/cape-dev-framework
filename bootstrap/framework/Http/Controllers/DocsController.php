@@ -2,6 +2,9 @@
 
 namespace WebApp\Http\Controllers;
 
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,31 +44,49 @@ final class DocsController
         }
 
         $md = (string) file_get_contents($path);
-        $title = htmlspecialchars($filename, ENT_QUOTES, 'UTF-8');
-        $body = htmlspecialchars($md, ENT_QUOTES, 'UTF-8');
+        $env = new Environment([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+        $env->addExtension(new CommonMarkCoreExtension());
+        $converter = new CommonMarkConverter([], $env);
 
-        $html = <<<HTML
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{$title}</title>
-    <style>
-      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;margin:24px;line-height:1.5}
-      a{color:inherit}
-      pre{background:#0b1020;color:#e8edf6;padding:16px;border-radius:10px;overflow:auto}
-      .hint{color:#555;margin:0 0 12px}
-    </style>
-  </head>
-  <body>
-    <p class="hint">Docs are plain Markdown (rendered as preformatted text). File: <strong>{$title}</strong></p>
-    <pre>{$body}</pre>
-  </body>
-</html>
-HTML;
+        $rendered = $converter->convert($md);
+        $html = (string) $rendered;
 
-        return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+        $title = $this->prettyTitle($filename);
+
+        $nav = [
+            ['label' => 'Installation + quickstart', 'href' => '/docs/installation-and-quickstart', 'file' => 'installation-and-quickstart.md'],
+            ['label' => 'Routing + middleware', 'href' => '/docs/routing-and-middleware', 'file' => 'routing-and-middleware.md'],
+            ['label' => 'Controllers / requests / responses', 'href' => '/docs/controllers-requests-responses', 'file' => 'controllers-requests-responses.md'],
+            ['label' => 'Validation', 'href' => '/docs/validation', 'file' => 'validation.md'],
+            ['label' => 'Database + migrations', 'href' => '/docs/database-and-migrations', 'file' => 'database-and-migrations.md'],
+            ['label' => 'Authentication (JWT)', 'href' => '/docs/auth', 'file' => 'auth.md'],
+            ['label' => 'Queue', 'href' => '/docs/queue', 'file' => 'queue.md'],
+            ['label' => 'How to', 'href' => '/docs/how-to', 'file' => 'how-to.md'],
+        ];
+
+        $page = view('docs.show', [
+            'title' => $title,
+            'active' => $filename,
+            'html' => $html,
+            'nav' => $nav,
+        ]);
+
+        return new Response($page, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+    }
+
+    private function prettyTitle(string $filename): string
+    {
+        $name = preg_replace('/\\.md$/i', '', $filename) ?? $filename;
+        $name = str_replace(['_', '-'], ' ', $name);
+        $name = trim($name);
+        if ($name === '' || strtolower($name) === 'readme') {
+            return 'Docs';
+        }
+
+        return ucwords($name);
     }
 }
 

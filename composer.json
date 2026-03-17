@@ -9,6 +9,7 @@
     "illuminate/database": "^12.54",
     "illuminate/filesystem": "^12.54",
     "illuminate/view": "^12.54",
+    "league/commonmark": "^2.8",
     "monolog/monolog": "^3.10",
     "nesbot/carbon": "^3.11",
     "php-di/php-di": "^7.1",
