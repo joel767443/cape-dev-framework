@@ -15,6 +15,13 @@ use WebApp\Console\Commands\CacheClearCommand;
 use WebApp\Console\Commands\CacheSmokeCommand;
 use WebApp\Console\Support\CodeWriter;
 use Symfony\Contracts\Cache\CacheInterface;
+use WebApp\Queue\QueueInterface;
+use WebApp\Console\Commands\QueueRunCommand;
+use WebApp\Console\Commands\QueueWorkCommand;
+use WebApp\Console\Commands\QueueFailedCommand;
+use WebApp\Console\Commands\QueueFailedClearCommand;
+use WebApp\Console\Commands\QueueDispatchCommand;
+use WebApp\Queue\Dispatcher;
 
 final class ConsoleKernel
 {
@@ -40,6 +47,13 @@ final class ConsoleKernel
         $cache = $this->app->container()->get(CacheInterface::class);
         $this->console->addCommand(new CacheClearCommand(Application::$ROOT_PATH, $cache));
         $this->console->addCommand(new CacheSmokeCommand($cache));
+
+        $queue = $this->app->container()->get(QueueInterface::class);
+        $this->console->addCommand(new QueueRunCommand($queue, $this->app->container()));
+        $this->console->addCommand(new QueueWorkCommand($queue, $this->app->container()));
+        $this->console->addCommand(new QueueFailedCommand($queue));
+        $this->console->addCommand(new QueueFailedClearCommand($queue));
+        $this->console->addCommand(new QueueDispatchCommand($this->app->container()->get(Dispatcher::class)));
     }
 }
 

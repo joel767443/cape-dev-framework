@@ -20,6 +20,7 @@ use WebApp\Providers\ValidationServiceProvider;
 use WebApp\Providers\LoggingServiceProvider;
 use WebApp\Providers\EventsServiceProvider;
 use WebApp\Providers\CacheServiceProvider;
+use WebApp\Providers\QueueServiceProvider;
 use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\CorsMiddleware;
@@ -64,6 +65,7 @@ class Application
             new ValidationServiceProvider(),
             new EventsServiceProvider(),
             new CacheServiceProvider(),
+            new QueueServiceProvider(),
         ]);
 
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
