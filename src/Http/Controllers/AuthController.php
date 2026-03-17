@@ -38,5 +38,17 @@ final class AuthController
             'data' => ['token' => $token],
         ], 200);
     }
+
+    public function ping(Request $request): Response
+    {
+        return new JsonResponse([
+            'success' => true,
+            'code' => 200,
+            'message' => 'OK',
+            'data' => [
+                'auth' => $request->attributes->get('auth'),
+            ],
+        ], 200);
+    }
 }
 

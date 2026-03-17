@@ -32,10 +32,10 @@ Routes can be protected by attaching middleware alias `auth_jwt` (see `src/Provi
 
 Example:
 
-- `GET /api/items` is protected and requires:
+- `GET /api/secure/ping` is protected and requires:
 
 ```bash
-curl http://localhost:8001/api/items -H "Authorization: Bearer <token>"
+curl http://localhost:8001/api/secure/ping -H "Authorization: Bearer <token>"
 ```
 
 The decoded claims are available on the request as attribute `auth`.

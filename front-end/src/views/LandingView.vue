@@ -1,7 +1,18 @@
 <script setup>
-const installSnippet = `composer create-project cape-dev/framework my-app
-cd my-app
-php -S localhost:8000 -t public`
+import config from '../config.js'
+
+const backendBaseUrl = String(config.apiBaseUrl || '').replace(/\/api\/?$/, '')
+const docsUrl = backendBaseUrl ? `${backendBaseUrl}/docs` : ''
+
+const installSnippet = `# backend
+composer install
+php -S localhost:8001 index.php
+
+# frontend
+cd front-end
+npm install
+cp src/config.example.js src/config.js
+npm run dev`
 </script>
 
 <template>
@@ -22,8 +33,14 @@ php -S localhost:8000 -t public`
 
         <div class="d-flex flex-wrap gap-2">
           <RouterLink class="btn btn-success btn-lg" to="/items">View CRUD demo</RouterLink>
-          <a class="btn btn-outline-secondary btn-lg" href="#" aria-disabled="true">Read docs</a>
-          <a class="btn btn-outline-secondary btn-lg" href="#" aria-disabled="true">GitHub</a>
+          <a
+            class="btn btn-outline-secondary btn-lg"
+            :href="docsUrl"
+            target="_blank"
+            rel="noreferrer"
+            :aria-disabled="!docsUrl"
+            :class="{ disabled: !docsUrl }"
+          >Read docs</a>
         </div>
       </div>
 
@@ -46,10 +63,10 @@ php -S localhost:8000 -t public`
       <div class="col-12 col-md-4">
         <div class="card h-100">
           <div class="card-body">
-            <h2 class="h5">Clean structure</h2>
+            <h2 class="h5">Batteries included</h2>
             <p class="text-secondary mb-0">
-              A predictable layout for controllers, requests, responses, models,
-              and repositories.
+              Symfony Routing + HttpFoundation, PHP-DI, Symfony Validator, Monolog,
+              cache/queue, migrations.
             </p>
           </div>
         </div>
@@ -57,9 +74,10 @@ php -S localhost:8000 -t public`
       <div class="col-12 col-md-4">
         <div class="card h-100">
           <div class="card-body">
-            <h2 class="h5">API-first</h2>
+            <h2 class="h5">New integrations</h2>
             <p class="text-secondary mb-0">
-              Designed around JSON responses and a smooth local dev loop.
+              Guzzle outbound HTTP, optional Doctrine ORM, optional Symfony Messenger,
+              JWT auth endpoints + middleware.
             </p>
           </div>
         </div>
@@ -67,9 +85,9 @@ php -S localhost:8000 -t public`
       <div class="col-12 col-md-4">
         <div class="card h-100">
           <div class="card-body">
-            <h2 class="h5">Extensible</h2>
+            <h2 class="h5">Dev experience</h2>
             <p class="text-secondary mb-0">
-              Add middleware, services, and packages without fighting the core.
+              Symfony Console commands, PHPUnit + Pest, Dotenv, Carbon `now()`, UUID `uuid()`.
             </p>
           </div>
         </div>

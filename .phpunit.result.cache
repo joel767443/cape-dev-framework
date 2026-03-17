@@ -1,1 +1,1 @@
-{"version":2,"defects":{"HttpKernelTest::testApiItemsReturnsJson":7},"times":{"HttpKernelTest::testApiItemsReturnsJson":0.044,"ViewRendererTest::testItRendersBladeTemplateWithVariables":0.014}}
+{"version":2,"defects":{"HttpKernelTest::testApiItemsReturnsJson":7},"times":{"HttpKernelTest::testApiItemsReturnsJson":0.077,"ViewRendererTest::testItRendersBladeTemplateWithVariables":0.019}}

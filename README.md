@@ -2,6 +2,21 @@
 
 Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI + validation + migrations) and a Vue 3 SPA frontend.
 
+## What’s included (backend)
+
+- **Routing**: Symfony Routing (`symfony/routing`) via `routes/api.php` + `src/Http/Kernel.php`
+- **HTTP layer**: Symfony HttpFoundation (`symfony/http-foundation`)
+- **DI container**: PHP-DI (`php-di/php-di`) + service providers (`src/Providers/*`)
+- **Validation**: Symfony Validator (`symfony/validator`) + `App\Http\Requests\FormRequest`
+- **Database**: Eloquent/Illuminate Database (`illuminate/database`) + migrations (`php bin/console migrate`)
+- **ORM (optional)**: Doctrine ORM (`doctrine/orm`) with `php bin/console doctrine:schema:update`
+- **Outbound HTTP**: Guzzle (`guzzlehttp/guzzle`) via `WebApp\Http\Client\HttpClient`
+- **Auth**: JWT (`firebase/php-jwt`) middleware alias `auth_jwt` + token endpoint `POST /api/auth/token`
+- **Queue**: custom Redis queue + **optional** Symfony Messenger (`symfony/messenger`)
+- **Logging**: Monolog (`monolog/monolog`)
+- **Testing**: PHPUnit + Pest
+- **Extras**: Dotenv, Carbon (`now()`), UUID (`uuid()`)
+
 ## Installation + quickstart
 
 ### Backend (PHP)
@@ -33,6 +48,7 @@ Routes are defined in `routes/api.php`.
 
 | Method | Path | Description |
 |--------|------|-------------|
+| POST | `/api/auth/token` | Issue a JWT token |
 | GET | `/api/items` | List items (currently returns empty array) |
 | GET | `/api/item` | Show item (currently 501) |
 | POST | `/api/items/create` | Create item (currently 501) |
@@ -60,6 +76,7 @@ php bin/console migrate
 
 ## Docs
 
+- [Docs index](docs/README.md)
 - [Installation + quickstart](docs/installation-and-quickstart.md)
 - [Routing + middleware](docs/routing-and-middleware.md)
 - [Controllers/requests/responses](docs/controllers-requests-responses.md)
