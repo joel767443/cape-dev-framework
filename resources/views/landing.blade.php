@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'cape-dev PHP Framework')
+@section('title', 'Cape Dev PHP Framework')
 
 @section('content')
       <div class="py-4 py-lg-5">

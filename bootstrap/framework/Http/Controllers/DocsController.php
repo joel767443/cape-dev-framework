@@ -25,6 +25,11 @@ final class DocsController
         return $this->renderDoc('README.md');
     }
 
+    public function queueMd(): Response
+    {
+        return $this->renderDoc('queue.md');
+    }
+
     /**
      * @param Request $request
      * @return Response

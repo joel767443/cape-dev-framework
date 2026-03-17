@@ -4,19 +4,19 @@ This folder contains the user-facing documentation for the backend framework and
 
 ## Start here
 
-- [How to (backend developer guide)](how-to.md)
-- [Installation + quickstart](installation-and-quickstart.md)
-- [Routing + middleware](routing-and-middleware.md)
-- [Controllers/requests/responses](controllers-requests-responses.md)
-- [Validation](validation.md)
-- [Database + migrations](database-and-migrations.md)
-- [DI container + providers](di-container-and-providers.md)
-- [Authentication (JWT)](auth.md)
-- [Queue](queue.md)
-- [Testing](testing.md)
-- [Upgrade guide](upgrade-guide.md)
+- [How to (backend developer guide)](/docs/how-to)
+- [Installation + quickstart](/docs/installation-and-quickstart)
+- [Routing + middleware](/docs/routing-and-middleware)
+- [Controllers/requests/responses](/docs/controllers-requests-responses)
+- [Validation](/docs/validation)
+- [Database + migrations](/docs/database-and-migrations)
+- [DI container + providers](/docs/di-container-and-providers)
+- [Authentication (JWT)](/docs/auth)
+- [Queue](/docs/queue)
+- [Testing](/docs/testing)
+- [Upgrade guide](/docs/upgrade-guide)
 
 Project changelog:
 
-- [`CHANGELOG.md`](../CHANGELOG.md)
+- [Changelog](/docs/changelog)
 

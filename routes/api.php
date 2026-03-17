@@ -18,6 +18,7 @@ $router->add('GET', '/api/secure/ping', [AuthController::class, 'ping'], ['middl
 
 $router->get('/docs', [DocsController::class, 'index']);
 $router->add('GET', '/docs/{page}', [DocsController::class, 'show'], ['where' => ['page' => '.+']]);
+$router->get('/queue.md', [DocsController::class, 'queueMd']);
 
 $router->post('/api/validate', [AuthController::class, 'validateExample']);
 
