@@ -1,6 +1,8 @@
 {
   "name": "webapp/cape-dev-php-framework",
+  "description": "What this package does",
   "type": "library",
+  "license": "MIT",
   "require": {
     "php": ">=8.1",
     "doctrine/orm": "^3.6",

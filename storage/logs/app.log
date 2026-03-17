@@ -159,3 +159,8 @@
 [2026-03-17T17:10:03.965379+00:00] app.INFO: http.response_ready {"status":200} []
 [2026-03-17T17:10:04.063149+00:00] app.INFO: http.request_received {"method":"GET","path":"/.well-known/appspecific/com.chrome.devtools.json"} []
 [2026-03-17T17:10:04.064216+00:00] app.ERROR: Unhandled exception {"method":"GET","path":"/.well-known/appspecific/com.chrome.devtools.json","message":"Not Found","exception":"WebApp\\Http\\Exception\\NotFoundHttpException"} []
+[2026-03-17T17:15:31.983509+00:00] app.INFO: http.request_received {"method":"GET","path":"/docs/auth"} []
+[2026-03-17T17:15:31.993191+00:00] app.INFO: http.controller_resolved {"controller":"WebApp\\Http\\Controllers\\DocsController::show"} []
+[2026-03-17T17:15:32.107641+00:00] app.INFO: http.response_ready {"status":200} []
+[2026-03-17T17:15:32.230251+00:00] app.INFO: http.request_received {"method":"GET","path":"/.well-known/appspecific/com.chrome.devtools.json"} []
+[2026-03-17T17:15:32.232632+00:00] app.ERROR: Unhandled exception {"method":"GET","path":"/.well-known/appspecific/com.chrome.devtools.json","message":"Not Found","exception":"WebApp\\Http\\Exception\\NotFoundHttpException"} []
