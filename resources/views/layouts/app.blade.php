@@ -33,17 +33,20 @@
     @stack('head')
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-          <img src="/logo.png" alt="cape-dev logo" width="24" height="24" style="border-radius: 6px" />
-          <span>cape-dev</span>
-        </a>
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/docs">Docs</a>
+    @hasSection('hide_nav')
+    @else
+      <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+            <img src="/logo.png" alt="cape-dev logo" width="24" height="24" style="border-radius: 6px" />
+            <span>cape-dev</span>
+          </a>
+          <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/docs">Docs</a>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    @endif
 
     <main class="container mt-3">
       @yield('content')

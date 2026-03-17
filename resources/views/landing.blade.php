@@ -2,6 +2,8 @@
 
 @section('title', 'Cape Dev PHP Framework')
 
+@section('hide_nav', true)
+
 @section('content')
       <div class="py-4 py-lg-5">
         <div class="row align-items-center g-4">
