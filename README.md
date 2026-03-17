@@ -19,6 +19,13 @@ Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI
 
 ## Installation + quickstart
 
+### Start both backend + frontend
+
+```bash
+chmod +x bin/dev
+./bin/dev
+```
+
 ### Backend (PHP)
 
 ```bash
