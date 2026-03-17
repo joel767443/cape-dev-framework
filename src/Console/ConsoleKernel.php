@@ -29,6 +29,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use WebApp\Console\Commands\MessengerConsumeCommand;
+use WebApp\Console\Commands\DevCommand;
 
 final class ConsoleKernel
 {
@@ -72,6 +73,8 @@ final class ConsoleKernel
             $this->app->container()->get(MessageBusInterface::class),
             $this->app->container()->get(EventDispatcherInterface::class),
         ));
+
+        $this->console->addCommand(new DevCommand(Application::$ROOT_PATH));
     }
 }
 

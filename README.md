@@ -26,6 +26,16 @@ chmod +x bin/dev
 ./bin/dev
 ```
 
+### One-word CLI (`php run`)
+
+`bin/console` still works, but you can also run the console as:
+
+```bash
+php run
+php run route:list
+php run dev
+```
+
 ### Backend (PHP)
 
 ```bash

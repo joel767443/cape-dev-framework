@@ -1,0 +1,9 @@
+<?php
+
+require __DIR__ . '/autoload.php';
+
+use WebApp\Console\ConsoleApplicationFactory;
+
+$console = ConsoleApplicationFactory::create(__DIR__);
+$console->run();
+
