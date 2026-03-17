@@ -1,0 +1,46 @@
+<?php
+
+namespace WebApp\Console\Commands;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+final class CacheClearCommand extends Command
+{
+    public function __construct(private readonly string $rootPath)
+    {
+        parent::__construct('cache:clear');
+    }
+
+    protected function configure(): void
+    {
+        $this->setDescription('Clear application cache files.');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $cacheDir = rtrim($this->rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'cache';
+        if (!is_dir($cacheDir)) {
+            $output->writeln("<info>No cache directory:</info> {$cacheDir}");
+            return Command::SUCCESS;
+        }
+
+        $removed = 0;
+        $files = glob($cacheDir . DIRECTORY_SEPARATOR . '*') ?: [];
+        foreach ($files as $file) {
+            $base = basename($file);
+            if ($base === '.gitkeep') {
+                continue;
+            }
+            if (is_file($file) && @unlink($file)) {
+                $removed++;
+                $output->writeln("Removed {$file}");
+            }
+        }
+
+        $output->writeln("<info>Cache cleared.</info> Removed {$removed} file(s).");
+        return Command::SUCCESS;
+    }
+}
+

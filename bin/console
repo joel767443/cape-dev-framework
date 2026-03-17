@@ -3,17 +3,8 @@
 
 require __DIR__ . '/../autoload.php';
 
-use Symfony\Component\Console\Application as ConsoleApplication;
-use WebApp\Application;
-use WebApp\Console\Commands\RoutesListCommand;
+use WebApp\Console\ConsoleApplicationFactory;
 
-$app = new Application(dirname(__DIR__));
-
-// Load routes the same way as the HTTP front controller.
-$router = $app->router;
-require __DIR__ . '/../routes/api.php';
-
-$console = new ConsoleApplication('WebApp Console');
-$console->addCommand(new RoutesListCommand($app->router->getRouteCollection()));
+$console = ConsoleApplicationFactory::create(dirname(__DIR__));
 $console->run();
 

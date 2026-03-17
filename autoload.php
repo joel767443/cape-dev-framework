@@ -8,7 +8,6 @@
 $composerAutoload = __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 if (is_file($composerAutoload)) {
     require_once $composerAutoload;
-    return;
 }
 
 spl_autoload_register(function (string $class_name): void {
@@ -16,6 +15,7 @@ spl_autoload_register(function (string $class_name): void {
     // Map the namespace to the src folder
     $namespace_mapping = [
         'WebApp\\' => '/src',
+        'App\\' => '/app',
     ];
 
     foreach ($namespace_mapping as $namespace => $directory) {

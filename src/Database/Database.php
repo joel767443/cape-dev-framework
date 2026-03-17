@@ -38,6 +38,11 @@ class Database
         }
     }
 
+    public function pdo(): PDO
+    {
+        return $this->pdo;
+    }
+
     /**
      * @return string
      */

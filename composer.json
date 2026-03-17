@@ -13,7 +13,8 @@
   },
   "autoload": {
     "psr-4": {
-      "WebApp\\": "src/"
+      "WebApp\\": "src/",
+      "App\\": "app/"
     },
     "files": [
       "src/Support/helpers.php"

@@ -11,12 +11,14 @@ final class RoutesListCommand extends Command
 {
     public function __construct(private readonly RouteCollection $routes)
     {
-        parent::__construct('routes:list');
+        parent::__construct('route:list');
     }
 
     protected function configure(): void
     {
-        $this->setDescription('List registered routes.');
+        $this
+            ->setDescription('List registered routes.')
+            ->setAliases(['routes:list']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
