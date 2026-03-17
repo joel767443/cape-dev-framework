@@ -10,11 +10,22 @@ final class HttpKernelTest extends TestCase
     {
         require_once __DIR__ . '/../autoload.php';
 
+        putenv('JWT_SECRET=0123456789abcdef0123456789abcdef');
+
         $app = new Application(dirname(__DIR__));
         $router = $app->router;
         require __DIR__ . '/../routes/api.php';
 
+        $tokenReq = Request::create('/api/auth/token', 'POST', [], [], [], [], json_encode(['sub' => 'demo']));
+        $tokenReq->headers->set('Content-Type', 'application/json');
+        $tokenRes = $app->handle($tokenReq);
+        self::assertSame(200, $tokenRes->getStatusCode());
+        $tokenPayload = json_decode((string) $tokenRes->getContent(), true);
+        $token = (string) ($tokenPayload['data']['token'] ?? '');
+        self::assertNotSame('', $token);
+
         $request = Request::create('/api/items', 'GET');
+        $request->headers->set('Authorization', 'Bearer ' . $token);
         $response = $app->handle($request);
 
         self::assertSame(200, $response->getStatusCode());

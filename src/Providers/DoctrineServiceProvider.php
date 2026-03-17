@@ -3,6 +3,7 @@
 namespace WebApp\Providers;
 
 use DI\ContainerBuilder;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -36,7 +37,8 @@ final class DoctrineServiceProvider implements ServiceProviderInterface
                     $conn['path'] = $path;
                 }
 
-                return EntityManager::create($conn, $config);
+                $connection = DriverManager::getConnection($conn);
+                return new EntityManager($connection, $config);
             }),
         ]);
     }

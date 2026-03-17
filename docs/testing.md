@@ -10,6 +10,14 @@ Run all tests from the repo root:
 ./vendor/bin/phpunit
 ```
 
+## Pest (optional)
+
+Pest is installed as an alternative test runner:
+
+```bash
+./vendor/bin/pest
+```
+
 ## How tests are structured
 
 Tests live in `tests/` and generally:

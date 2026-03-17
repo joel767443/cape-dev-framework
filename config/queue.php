@@ -19,5 +19,16 @@ return [
         // Reuse REDIS_DSN if present; allow override.
         'dsn' => getenv('QUEUE_REDIS_DSN') ?: (getenv('REDIS_DSN') ?: 'tcp://127.0.0.1:6379'),
     ],
+
+    /**
+     * Symfony Messenger (optional)
+     *
+     * Supported transports in this repo:
+     * - sync (default): in-process message bus (no queue)
+     * - in_memory: process-local queue useful for development/tests (requires a consumer process)
+     */
+    'messenger' => [
+        'transport' => getenv('MESSENGER_TRANSPORT') ?: 'sync',
+    ],
 ];
 

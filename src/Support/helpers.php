@@ -3,6 +3,8 @@
 use WebApp\Config\ConfigRepository;
 use WebApp\View\ViewRenderer;
 use Psr\Container\ContainerInterface;
+use Carbon\CarbonImmutable;
+use Ramsey\Uuid\Uuid;
 
 if (!function_exists('config')) {
     /**
@@ -45,6 +47,20 @@ if (!function_exists('view')) {
         /** @var ViewRenderer $renderer */
         $renderer = app(ViewRenderer::class);
         return $renderer->render($name, $data);
+    }
+}
+
+if (!function_exists('now')) {
+    function now(): CarbonImmutable
+    {
+        return CarbonImmutable::now();
+    }
+}
+
+if (!function_exists('uuid')) {
+    function uuid(): string
+    {
+        return Uuid::uuid4()->toString();
     }
 }
 

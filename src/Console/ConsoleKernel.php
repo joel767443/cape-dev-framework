@@ -25,6 +25,10 @@ use WebApp\Queue\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use WebApp\Console\Commands\DoctrineSchemaUpdateCommand;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
+use WebApp\Console\Commands\MessengerConsumeCommand;
 
 final class ConsoleKernel
 {
@@ -61,6 +65,13 @@ final class ConsoleKernel
 
         // Doctrine ORM (optional)
         $this->console->addCommand(new DoctrineSchemaUpdateCommand($this->app->container()->get(EntityManagerInterface::class)));
+
+        // Symfony Messenger (optional)
+        $this->console->addCommand(new MessengerConsumeCommand(
+            $this->app->container()->get(ReceiverInterface::class),
+            $this->app->container()->get(MessageBusInterface::class),
+            $this->app->container()->get(EventDispatcherInterface::class),
+        ));
     }
 }
 

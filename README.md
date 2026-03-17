@@ -67,5 +67,7 @@ php bin/console migrate
 - [Database + migrations](docs/database-and-migrations.md)
 - [DI container + providers](docs/di-container-and-providers.md)
 - [Testing](docs/testing.md)
+- [Authentication (JWT)](docs/auth.md)
+- [Queue](docs/queue.md)
 - [Upgrade guide](docs/upgrade-guide.md)
 - [Changelog](CHANGELOG.md)

@@ -10,6 +10,7 @@ use WebApp\Http\Middleware\CorsMiddleware;
 use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\ErrorLoggingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
+use WebApp\Http\Middleware\AuthJwtMiddleware;
 
 final class HttpServiceProvider implements ServiceProviderInterface
 {
@@ -25,6 +26,7 @@ final class HttpServiceProvider implements ServiceProviderInterface
             ExceptionHandlingMiddleware::class => \DI\autowire(ExceptionHandlingMiddleware::class),
             CorsMiddleware::class => \DI\autowire(CorsMiddleware::class),
             ErrorLoggingMiddleware::class => \DI\autowire(ErrorLoggingMiddleware::class),
+            AuthJwtMiddleware::class => \DI\autowire(AuthJwtMiddleware::class),
         ]);
     }
 
@@ -35,6 +37,7 @@ final class HttpServiceProvider implements ServiceProviderInterface
         $registry->alias('cors', CorsMiddleware::class);
         $registry->alias('exceptions', ExceptionHandlingMiddleware::class);
         $registry->alias('error_log', ErrorLoggingMiddleware::class);
+        $registry->alias('auth_jwt', AuthJwtMiddleware::class);
     }
 }
 

@@ -62,3 +62,14 @@ php bin/console doctrine:schema:update --force
 
 Configuration is under `config/database.php` → `database.doctrine.*` and environment variables like `DOCTRINE_SQLITE_PATH`.
 
+## Carbon + UUID helpers
+
+This repo provides two helpers (see `src/Support/helpers.php`):
+
+- `now()` returns a `CarbonImmutable`
+- `uuid()` returns a UUID v4 string
+
+For Eloquent models that should use UUID primary keys, you can apply the trait:
+
+- `App\Models\Concerns\UsesUuid`
+
