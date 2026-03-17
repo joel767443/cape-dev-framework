@@ -12,7 +12,9 @@ use WebApp\Console\Commands\MigrateCommand;
 use WebApp\Console\Commands\RoutesListCommand;
 use WebApp\Console\Commands\SeedCommand;
 use WebApp\Console\Commands\CacheClearCommand;
+use WebApp\Console\Commands\CacheSmokeCommand;
 use WebApp\Console\Support\CodeWriter;
+use Symfony\Contracts\Cache\CacheInterface;
 
 final class ConsoleKernel
 {
@@ -35,7 +37,9 @@ final class ConsoleKernel
 
         $this->console->addCommand(new MigrateCommand(Application::$ROOT_PATH));
         $this->console->addCommand(new SeedCommand());
-        $this->console->addCommand(new CacheClearCommand(Application::$ROOT_PATH));
+        $cache = $this->app->container()->get(CacheInterface::class);
+        $this->console->addCommand(new CacheClearCommand(Application::$ROOT_PATH, $cache));
+        $this->console->addCommand(new CacheSmokeCommand($cache));
     }
 }
 

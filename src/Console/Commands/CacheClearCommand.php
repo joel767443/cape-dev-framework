@@ -2,13 +2,17 @@
 
 namespace WebApp\Console\Commands;
 
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class CacheClearCommand extends Command
 {
-    public function __construct(private readonly string $rootPath)
+    public function __construct(
+        private readonly string $rootPath,
+        private readonly CacheInterface $cache
+    )
     {
         parent::__construct('cache:clear');
     }
@@ -20,6 +24,9 @@ final class CacheClearCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // Clear the active cache pool (Redis/filesystem, depending on config).
+        $this->cache->clear();
+
         $cacheDir = rtrim($this->rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'cache';
         if (!is_dir($cacheDir)) {
             $output->writeln("<info>No cache directory:</info> {$cacheDir}");
