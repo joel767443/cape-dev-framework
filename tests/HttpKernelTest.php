@@ -6,7 +6,7 @@ use WebApp\Application;
 
 final class HttpKernelTest extends TestCase
 {
-    public function testApiItemsReturnsJson(): void
+    public function testJwtProtectedPingReturnsJson(): void
     {
         require_once __DIR__ . '/../autoload.php';
 
@@ -24,7 +24,7 @@ final class HttpKernelTest extends TestCase
         $token = (string) ($tokenPayload['data']['token'] ?? '');
         self::assertNotSame('', $token);
 
-        $request = Request::create('/api/items', 'GET');
+        $request = Request::create('/api/secure/ping', 'GET');
         $request->headers->set('Authorization', 'Bearer ' . $token);
         $response = $app->handle($request);
 

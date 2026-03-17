@@ -4,6 +4,7 @@ This folder contains the user-facing documentation for the backend framework and
 
 ## Start here
 
+- [How to (backend developer guide)](how-to.md)
 - [Installation + quickstart](installation-and-quickstart.md)
 - [Routing + middleware](routing-and-middleware.md)
 - [Controllers/requests/responses](controllers-requests-responses.md)

@@ -29,7 +29,6 @@ npm run dev`
         </p>
 
         <div class="d-flex flex-wrap gap-2">
-          <RouterLink class="btn btn-success btn-lg" to="/items">View CRUD demo</RouterLink>
           <RouterLink class="btn btn-outline-secondary btn-lg" to="/docs">Read docs</RouterLink>
         </div>
       </div>
@@ -85,7 +84,7 @@ npm run dev`
     </div>
 
     <div class="mt-5 text-secondary small">
-      <div>Tip: the CRUD demo talks to your API endpoints under <code>/items</code>.</div>
+      <div>Tip: use <code>php run route:list</code> to see backend routes.</div>
     </div>
   </div>
 </template>

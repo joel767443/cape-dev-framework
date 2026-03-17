@@ -2,6 +2,7 @@
 
 namespace WebApp\Http\Controllers;
 
+use App\Http\Requests\ValidateExampleRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,16 @@ final class AuthController
             'data' => [
                 'auth' => $request->attributes->get('auth'),
             ],
+        ], 200);
+    }
+
+    public function validateExample(ValidateExampleRequest $request): Response
+    {
+        return new JsonResponse([
+            'success' => true,
+            'code' => 200,
+            'message' => 'Validated',
+            'data' => $request->validated(),
         ], 200);
     }
 }

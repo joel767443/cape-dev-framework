@@ -22,6 +22,11 @@ npm install
 npm run dev
 ```
 
+### Pages
+
+- `/` landing page
+- `/docs` embedded documentation
+
 ### Compile and Minify for Production
 
 ```sh
