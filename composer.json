@@ -1,5 +1,5 @@
 {
-  "name": "webapp/cape-dev-php-framework",
+  "name": "cape-dev/php-framework",
   "description": "A lightweight PHP web application framework for rapid development (routing, DI, database, views, console, caching).",
   "type": "project",
   "license": "MIT",
