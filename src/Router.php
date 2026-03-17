@@ -8,23 +8,12 @@ namespace WebApp;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use WebApp\Http\Requests\Request;
-use WebApp\Http\Responses\Response;
 
 /**
  * Class Router
  */
 class Router
 {
-    /**
-     * @var Request
-     */
-    public Request $request;
-    /**
-     * @var Response
-     */
-    public Response $response;
-
     /**
      * @var RouteCollection
      */
@@ -43,13 +32,9 @@ class Router
     protected array $groupStack = [];
 
     /**
-     * @param Request $request
-     * @param Response $response
      */
-    public function __construct(Request $request, Response $response)
+    public function __construct()
     {
-        $this->request = $request;
-        $this->response = $response;
         $this->routes = new RouteCollection();
         $this->groupStack[] = ['prefix' => '', 'name_prefix' => '', 'middleware' => []];
     }

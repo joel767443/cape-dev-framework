@@ -1,137 +1,71 @@
 # cape-dev
 
-A lightweight full-stack CRUD application with a custom PHP MVC framework on the backend and a Vue 3 single-page application on the frontend. Manages a catalog of items with create, read, update, and delete operations.
+Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI + validation + migrations) and a Vue 3 SPA frontend.
 
-## Tech Stack
+## Installation + quickstart
 
-### Backend
-- **Language:** PHP 8+
-- **Architecture:** Custom MVC framework (no external framework dependencies)
-- **Database:** SQLite
-- **Server:** PHP built-in server
-
-### Frontend
-- **Framework:** Vue 3 with Vue Router
-- **HTTP Client:** Axios
-- **UI:** Bootstrap 5
-- **Build Tool:** Vite
-
-## Features
-
-- Custom PHP router with GET/POST method support
-- JSON API responses with proper CORS handling
-- Model layer with validation and CRUD operations
-- Database abstraction via PDO
-- Eloquent-style ORM (Illuminate Database) + fluent migrations
-- Vue 3 SPA with create, edit, and index views for items
-- Item properties: name, description, brand, color, price, availability, checked status
-
-## API Endpoints
-
-| Method | Endpoint             | Description       |
-|--------|----------------------|-------------------|
-| GET    | `/api/items`         | List all items    |
-| GET    | `/api/item?id=`      | Get single item   |
-| POST   | `/api/items/create`  | Create an item    |
-| POST   | `/api/items/update`  | Update an item    |
-| GET    | `/api/items/delete?id=` | Delete an item |
-
-## Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone git@github.com:joel767443/cape-dev.git
-   cd cape-dev
-   ```
-
-2. **Set up the database**
-
-   The backend will auto-create the SQLite database at `src/Database/cape-dev.sqlite` on first run (and seed it with sample items).
-
-   To reset the database, delete `src/Database/cape-dev.sqlite` and start the server again.
-
-## ORM, Migrations, and DB-backed Validation (new)
-
-### Eloquent-style models
-- Base model lives at `app/Models/Model.php`.
-- Example model: `app/Models/User.php`.
-
-### Fluent migrations
-- Generate a migration:
+### Backend (PHP)
 
 ```bash
-php bin/console make:migration create_widgets_table
+composer install
+
+# start HTTP server (from repo root)
+php -S localhost:8001 index.php
 ```
 
-- Run migrations:
+### Frontend (Vue)
 
 ```bash
+cd front-end
+npm install
+cp src/config.example.js src/config.js
+```
+
+Set `apiBaseUrl` in `front-end/src/config.js` to `http://localhost:8001/api`, then:
+
+```bash
+npm run dev
+```
+
+## API endpoints (current routes)
+
+Routes are defined in `routes/api.php`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/items` | List items (currently returns empty array) |
+| GET | `/api/item` | Show item (currently 501) |
+| POST | `/api/items/create` | Create item (currently 501) |
+| POST | `/api/items/update` | Update item (currently 501) |
+| GET | `/api/items/delete` | Delete item (currently 501) |
+| POST | `/api/items/validate` | Validation example (returns validated payload or 422) |
+
+## Backend architecture (source of truth)
+
+- **Entrypoint**: `index.php` loads routes from `routes/api.php` and runs `WebApp\Application`.
+- **HTTP kernel**: `src/Http/Kernel.php` matches routes (Symfony Routing), runs middleware, invokes controllers, and enforces that controllers return a `Symfony\Component\HttpFoundation\Response`.
+- **Middleware**: global middleware is wired in `src/Application.php`. Route middleware is attached per route (or via `Router::group()`) and resolved via `src/Http/Middleware/MiddlewareRegistry.php`.
+- **Validation**: request validation is Symfony Validator via `App\Http\Requests\FormRequest` + `WebApp\Validation\RequestValidator`. If a controller action type-hints a `FormRequest`, it is automatically validated by the kernel before the controller runs.
+- **Database**: configured in `config/database.php` and wired via `src/Providers/DatabaseServiceProvider.php` (Illuminate Database / Eloquent).
+- **Migrations**: discovered in `app/Database/Migrations` and run via `php bin/console migrate`.
+
+## CLI (bin/console)
+
+```bash
+php bin/console route:list
+php bin/console make:request StoreItemRequest
+php bin/console make:migration create_items_table
 php bin/console migrate
 ```
 
-### DB-backed validation rules
-Use Symfony Validator constraints in your `FormRequest`:
-- `WebApp\Validation\Constraints\Unique`
-- `WebApp\Validation\Constraints\Exists`
+## Docs
 
-They query the DB via the shared Illuminate connection and return 422 validation errors (same format as other `FormRequest` validation).
-
-3. **Configure the backend**
-   ```bash
-   cp config.sample.php config.php
-   ```
-   (Optional) Edit `config.php` to change `sqlitePath`.
-
-4. **Start the PHP server**
-   ```bash
-   php -S localhost:8001
-   ```
-
-5. **Set up the frontend** (in a new terminal)
-   ```bash
-   cd front-end
-   npm install
-   cp src/config.example.js src/config.js
-   ```
-   Set `apiBaseUrl` in `src/config.js` to `http://localhost:8001`.
-
-6. **Start the frontend dev server**
-   ```bash
-   npm run dev
-   ```
-
-## Project Structure
-
-```
-cape-dev/
-├── index.php              # Entry point and route definitions
-├── autoload.php           # PSR-4 autoloader
-├── config.sample.php      # Database config template
-├── src/
-│   ├── Application.php    # App bootstrap
-│   ├── Router.php         # Custom router
-│   ├── Database/
-│   │   ├── Database.php   # PDO database wrapper
-│   │   ├── main.sql       # Legacy MySQL schema/seed (optional reference)
-│   │   └── main.sqlite.sql # SQLite schema and seed data
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   └── ItemsController.php
-│   │   ├── Requests/
-│   │   │   └── Request.php
-│   │   └── Responses/
-│   │       └── Response.php
-│   └── Models/
-│       ├── Model.php      # Base model
-│       └── Item.php       # Item model
-└── front-end/
-    ├── src/
-    │   ├── App.vue
-    │   ├── main.js
-    │   ├── router/index.js
-    │   └── views/items/
-    │       ├── IndexView.vue
-    │       ├── CreateView.vue
-    │       └── EditView.vue
-    └── package.json
-```
+- [Installation + quickstart](docs/installation-and-quickstart.md)
+- [Routing + middleware](docs/routing-and-middleware.md)
+- [Controllers/requests/responses](docs/controllers-requests-responses.md)
+- [Validation](docs/validation.md)
+- [Database + migrations](docs/database-and-migrations.md)
+- [DI container + providers](docs/di-container-and-providers.md)
+- [Testing](docs/testing.md)
+- [Upgrade guide](docs/upgrade-guide.md)
+- [Changelog](CHANGELOG.md)

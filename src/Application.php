@@ -75,7 +75,7 @@ class Application
         $GLOBALS['__webapp_container'] = $this->container;
 
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
-        $this->router = new Router(new \WebApp\Http\Requests\Request(), new \WebApp\Http\Responses\Response());
+        $this->router = new Router();
 
         $this->kernel = new Kernel(
             $this->router->getRouteCollection(),
