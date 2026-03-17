@@ -23,6 +23,8 @@ use WebApp\Console\Commands\QueueFailedClearCommand;
 use WebApp\Console\Commands\QueueDispatchCommand;
 use WebApp\Queue\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use WebApp\Console\Commands\DoctrineSchemaUpdateCommand;
 
 final class ConsoleKernel
 {
@@ -56,6 +58,9 @@ final class ConsoleKernel
         $this->console->addCommand(new QueueFailedCommand($queue));
         $this->console->addCommand(new QueueFailedClearCommand($queue));
         $this->console->addCommand(new QueueDispatchCommand($this->app->container()->get(Dispatcher::class)));
+
+        // Doctrine ORM (optional)
+        $this->console->addCommand(new DoctrineSchemaUpdateCommand($this->app->container()->get(EntityManagerInterface::class)));
     }
 }
 

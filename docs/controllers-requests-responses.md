@@ -44,7 +44,14 @@ For `/api/*` paths (or `Accept: application/json`), errors are returned as JSON:
 }
 ```
 
-## Legacy response helper
+## Outbound HTTP (Guzzle)
 
-There is a legacy helper in `src/Http/Responses/Response.php` that returns PHP arrays and sets headers directly. The active kernel enforces Symfony `Response` objects, so new code should prefer Symfony responses.
+This project ships with a small wrapper around Guzzle so you can type-hint a single service from the container:
+
+- `WebApp\Http\Client\HttpClient`
+
+Configuration:
+
+- `HTTP_BASE_URI` → `config('http.base_uri')`
+- `HTTP_TIMEOUT` → `config('http.timeout')`
 

@@ -1,0 +1,61 @@
+<?php
+
+namespace WebApp\Providers;
+
+use DI\ContainerBuilder;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMSetup;
+use Psr\Container\ContainerInterface;
+use WebApp\Container\ServiceProviderInterface;
+
+final class DoctrineServiceProvider implements ServiceProviderInterface
+{
+    public function register(ContainerBuilder $builder): void
+    {
+        $builder->addDefinitions([
+            EntityManagerInterface::class => \DI\factory(function (): EntityManagerInterface {
+                $root = (string) \WebApp\Application::$ROOT_PATH;
+                $cfg = (array) config('database.doctrine', []);
+
+                $entitiesPath = (string) ($cfg['entities_path'] ?? 'app/Entities');
+                $devMode = (bool) ($cfg['dev_mode'] ?? false);
+                $conn = (array) ($cfg['connection'] ?? []);
+
+                $entitiesDir = $this->resolvePath($root, $entitiesPath);
+                $config = ORMSetup::createAttributeMetadataConfiguration([$entitiesDir], $devMode);
+
+                $connDriver = (string) ($conn['driver'] ?? 'pdo_sqlite');
+                if ($connDriver === 'pdo_sqlite') {
+                    $path = (string) ($conn['path'] ?? '');
+                    if ($path === '') {
+                        $path = $root . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Database' . DIRECTORY_SEPARATOR . 'cape-dev.sqlite';
+                    } else {
+                        $path = $this->resolvePath($root, $path);
+                    }
+                    $conn['path'] = $path;
+                }
+
+                return EntityManager::create($conn, $config);
+            }),
+        ]);
+    }
+
+    public function boot(ContainerInterface $container): void
+    {
+        // No-op: Doctrine is opt-in; resolved on demand.
+    }
+
+    private function resolvePath(string $root, string $path): string
+    {
+        $path = trim($path);
+        if ($path === '') {
+            return $root;
+        }
+        if ($path[0] === DIRECTORY_SEPARATOR || preg_match('/^[A-Za-z]:[\\\\\\/]/', $path)) {
+            return $path;
+        }
+        return $root . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+    }
+}
+

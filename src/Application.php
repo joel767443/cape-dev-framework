@@ -23,6 +23,8 @@ use WebApp\Providers\CacheServiceProvider;
 use WebApp\Providers\QueueServiceProvider;
 use WebApp\Providers\DatabaseServiceProvider;
 use WebApp\Providers\ViewServiceProvider;
+use WebApp\Providers\HttpClientServiceProvider;
+use WebApp\Providers\DoctrineServiceProvider;
 use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\CorsMiddleware;
@@ -63,12 +65,14 @@ class Application
         $this->container = ContainerFactory::build([
             new HttpServiceProvider(),
             new RoutingServiceProvider(),
+            new HttpClientServiceProvider(),
             new LoggingServiceProvider(),
             new ValidationServiceProvider(),
             new EventsServiceProvider(),
             new CacheServiceProvider(),
             new QueueServiceProvider(),
             new DatabaseServiceProvider(),
+            new DoctrineServiceProvider(),
             new ViewServiceProvider(),
         ]);
 
