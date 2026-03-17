@@ -3,6 +3,7 @@
 namespace WebApp\Models;
 
 use WebApp\Database\Database;
+use WebApp\Repositories\BaseRepository;
 
 /**
  * class class
@@ -43,6 +44,19 @@ abstract class Model
     abstract public function rules(): array;
 
     /**
+     * @return BaseRepository
+     */
+    protected static function repository(): BaseRepository
+    {
+        $table = static::$table;
+        if ($table === '') {
+            throw new \RuntimeException(static::class . " must define protected static string \$table");
+        }
+
+        return new BaseRepository($table);
+    }
+
+    /**
      * @return true
      */
     public function create()
@@ -75,17 +89,7 @@ abstract class Model
      */
     public static function find(int $id)
     {
-        $table = static::$table;
-        if ($table === '') {
-            throw new \RuntimeException(static::class . " must define protected static string \$table");
-        }
-
-        $db = new Database();
-        $stmt = $db->query("SELECT * FROM {$table} WHERE id = :id", ['id' => $id]);
-        $row = $db->fetchAssoc($stmt);
-        $db->close();
-
-        return $row ?: null;
+        return static::repository()->findById($id);
     }
 
     /**
@@ -95,37 +99,54 @@ abstract class Model
      */
     public static function all(array $where = [], string $orderBy = 'id DESC'): array
     {
-        $table = static::$table;
-        if ($table === '') {
-            throw new \RuntimeException(static::class . " must define protected static string \$table");
-        }
+        return static::repository()->findAll($where, $orderBy);
+    }
 
-        $sql = "SELECT * FROM {$table}";
-        $params = [];
+    /**
+     * Instance-style access (requested): $modelInstance->findAll(...)
+     *
+     * @param array $where
+     * @param string $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return array
+     */
+    public function findAll(array $where = [], string $orderBy = 'id DESC', ?int $limit = null, ?int $offset = null): array
+    {
+        return static::repository()->findAll($where, $orderBy, $limit, $offset);
+    }
 
-        if (!empty($where)) {
-            $clauses = [];
-            foreach ($where as $column => $value) {
-                $param = "w_" . $column;
-                $clauses[] = "{$column} = :{$param}";
-                $params[$param] = $value;
-            }
-            $sql .= " WHERE " . implode(" AND ", $clauses);
-        }
+    /**
+     * @param int $id
+     * @return array|null
+     */
+    public function findById(int $id): ?array
+    {
+        return static::repository()->findById($id);
+    }
 
-        if ($orderBy !== '') {
-            if (!preg_match('/^[A-Za-z0-9_]+(\\s+(ASC|DESC))?$/i', $orderBy)) {
-                throw new \InvalidArgumentException("Invalid orderBy value.");
-            }
-            $sql .= " ORDER BY {$orderBy}";
-        }
+    /**
+     * @param array $parameters
+     * @param string $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return array|null
+     */
+    public function findByParameters(array $parameters, string $orderBy = 'id DESC', ?int $limit = null, ?int $offset = null): ?array
+    {
+        return static::repository()->findByParameters($parameters, $orderBy, $limit, $offset);
+    }
 
-        $db = new Database();
-        $stmt = $db->query($sql, $params);
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $db->close();
-
-        return $rows;
+    /**
+     * @param array $parameters
+     * @param int $page
+     * @param int $perPage
+     * @param string $orderBy
+     * @return array{data: array, pagination: array}
+     */
+    public function paginate(array $parameters = [], int $page = 1, int $perPage = 20, string $orderBy = 'id DESC'): array
+    {
+        return static::repository()->paginate($parameters, $page, $perPage, $orderBy);
     }
 
     /**
