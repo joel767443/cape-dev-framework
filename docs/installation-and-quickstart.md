@@ -4,7 +4,6 @@
 
 - PHP **8.1+**
 - Composer
-- Node.js + npm (for the Vue frontend)
 
 ## Backend (PHP)
 
@@ -12,7 +11,7 @@ From the repo root:
 
 ```bash
 composer install
-php -S localhost:8001 index.php
+php -S localhost:8001 -t public public/index.php
 ```
 
 The HTTP entrypoint is `index.php`. It loads routes from `routes/api.php` and runs `WebApp\Application`.
@@ -28,27 +27,10 @@ Common env vars:
 - `DB_CONNECTION` (default: `sqlite`)
 - `DB_SQLITE_PATH` (default: resolved to `src/Database/cape-dev.sqlite`)
 
-## Frontend (Vue 3 + Vite)
-
-```bash
-cd front-end
-npm install
-cp src/config.example.js src/config.js
-```
-
-Set `apiBaseUrl` in `front-end/src/config.js` to:
-
-- `http://localhost:8001/api`
-
-Then run:
-
-```bash
-npm run dev
-```
-
 ## Sanity checks
 
-- Open the frontend dev server and confirm it can reach the API.
+- Open `http://localhost:8001/` and confirm the landing page loads.
+- Open `http://localhost:8001/docs` and confirm docs load.
 - List backend routes:
 
 ```bash

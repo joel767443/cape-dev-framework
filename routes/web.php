@@ -6,6 +6,7 @@
  * @var \WebApp\Router $router
  */
 
-// Example:
-// $router->get('/', [\App\Controllers\HomeController::class, 'index']);
+use WebApp\Http\Controllers\HomeController;
+
+$router->get('/', [HomeController::class, 'index']);
 

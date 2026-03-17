@@ -8,10 +8,10 @@ From the repo root:
 
 ```bash
 composer install
-php -S localhost:8001 index.php
+php -S localhost:8001 public/index.php
 ```
 
-Or start both backend + frontend together:
+Or start the backend dev server:
 
 ```bash
 php run dev

@@ -17,39 +17,27 @@ final class DevCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Start backend + frontend dev servers (Ctrl+C stops both).')
-            ->addOption('backend', null, InputOption::VALUE_REQUIRED, 'Backend host:port', 'localhost:8001')
-            ->addOption('frontend-port', null, InputOption::VALUE_REQUIRED, 'Frontend dev server port', 5174);
+            ->setDescription('Start backend dev server.')
+            ->addOption('backend', null, InputOption::VALUE_REQUIRED, 'Backend host:port', 'localhost:8001');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $backend = (string) $input->getOption('backend');
-        $frontendPort = (int) $input->getOption('frontend-port');
-        $frontendPort = $frontendPort > 0 ? $frontendPort : 5174;
-
-        $backendCmd = ['php', '-S', $backend, 'index.php'];
-        $frontendCmd = ['npm', 'run', 'dev', '--', '--port', (string) $frontendPort];
+        $backendCmd = ['php', '-S', $backend, '-t', 'public', 'public/index.php'];
 
         $output->writeln("<info>Backend:</info> http://{$backend}");
-        $output->writeln("<info>Frontend:</info> http://localhost:{$frontendPort}");
-
         $backendProc = $this->spawn($backendCmd, $this->rootPath, $output);
-        $frontendProc = $this->spawn($frontendCmd, $this->rootPath . DIRECTORY_SEPARATOR . 'front-end', $output);
 
-        // Wait until one exits, then terminate both.
         while (true) {
             $b = proc_get_status($backendProc);
-            $f = proc_get_status($frontendProc);
-
-            if (!$b['running'] || !$f['running']) {
+            if (!$b['running']) {
                 break;
             }
             usleep(200_000);
         }
 
         $this->terminate($backendProc);
-        $this->terminate($frontendProc);
 
         return Command::SUCCESS;
     }

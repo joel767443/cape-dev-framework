@@ -1,6 +1,6 @@
 # cape-dev
 
-Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI + validation + migrations) and a Vue 3 SPA frontend.
+A lightweight custom PHP backend (routing + middleware + DI + validation + migrations) with a server-rendered landing page.
 
 ## What’s included (backend)
 
@@ -19,7 +19,7 @@ Full-stack CRUD app: a lightweight custom PHP backend (routing + middleware + DI
 
 ## Installation + quickstart
 
-### Start both backend + frontend
+### Start the backend
 
 ```bash
 chmod +x bin/dev
@@ -42,22 +42,9 @@ php run dev
 composer install
 
 # start HTTP server (from repo root)
-php -S localhost:8001 public/index.php
+php -S localhost:8001 -t public public/index.php
 ```
-
-### Frontend (Vue)
-
-```bash
-cd front-end
-npm install
-cp src/config.example.js src/config.js
-```
-
-Set `apiBaseUrl` in `front-end/src/config.js` to `http://localhost:8001/api`, then:
-
-```bash
-npm run dev
-```
+Open `http://localhost:8001/` for the landing page, or `http://localhost:8001/docs` for docs.
 
 ## API endpoints (current routes)
 
