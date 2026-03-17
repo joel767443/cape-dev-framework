@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class Recommendation extends Model
 {
     protected static string $table = 'recommendations';
@@ -15,9 +17,9 @@ class Recommendation extends Model
     public function rules(): array
     {
         return [
-            'profile_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'from_name' => [self::RULE_REQUIRED, self::IS_STRING],
-            'text' => [self::RULE_REQUIRED, self::IS_STRING],
+            'profile_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'from_name' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
+            'text' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
         ];
     }
 }

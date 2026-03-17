@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class VolunteerExperience extends Model
 {
     protected static string $table = 'volunteer_experiences';
@@ -16,8 +18,8 @@ class VolunteerExperience extends Model
     public function rules(): array
     {
         return [
-            'profile_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'organization' => [self::RULE_REQUIRED, self::IS_STRING],
+            'profile_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'organization' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
         ];
     }
 }
