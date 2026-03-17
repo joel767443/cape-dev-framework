@@ -19,7 +19,16 @@ final class RequestValidator
      */
     public function validateJson(Request $request, Constraint|array $constraints): array
     {
-        $data = $request->toArray();
+        return $this->validateArray($request->toArray(), $constraints);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param Constraint|Constraint[] $constraints
+     * @return array<string, mixed>
+     */
+    public function validateArray(array $data, Constraint|array $constraints): array
+    {
         $violations = $this->validator->validate($data, $constraints);
 
         if (count($violations) === 0) {

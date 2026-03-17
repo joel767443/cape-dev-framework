@@ -24,6 +24,7 @@ use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\CorsMiddleware;
 use WebApp\Http\Middleware\ErrorLoggingMiddleware;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use WebApp\Validation\RequestValidator;
 
 /**
  * Class Application
@@ -77,7 +78,8 @@ class Application
             ,
             $this->container,
             $this->container->get(MiddlewareRegistry::class),
-            $this->container->get(EventDispatcherInterface::class)
+            $this->container->get(EventDispatcherInterface::class),
+            $this->container->get(RequestValidator::class)
         );
     }
 

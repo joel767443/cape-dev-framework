@@ -21,7 +21,7 @@ final class MakeRequestCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Create a new request class in app/ (extends WebApp BaseRequest).')
+            ->setDescription('Create a new request class in app/ (FormRequest + Symfony Validator constraints).')
             ->addArgument('name', InputArgument::REQUIRED, 'Request class name (e.g. StoreUserRequest or Admin/StoreUserRequest)')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overwrite the file if it already exists');
     }
@@ -63,13 +63,17 @@ final class MakeRequestCommand extends Command
 
 namespace {$namespace};
 
-use WebApp\\Http\\Requests\\BaseRequest;
+use App\\Http\\Requests\\FormRequest;
+use Symfony\\Component\\Validator\\Constraint;
+use Symfony\\Component\\Validator\\Constraints as Assert;
 
-final class {$class} extends BaseRequest
+final class {$class} extends FormRequest
 {
-    public function rules(): array
+    public function constraints(): Constraint|array
     {
-        return [];
+        return new Assert\\Collection([
+            // 'email' => [new Assert\\NotBlank(), new Assert\\Email()],
+        ]);
     }
 }
 

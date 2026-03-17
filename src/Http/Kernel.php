@@ -17,6 +17,8 @@ use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Events\Http\ControllerResolved;
 use WebApp\Events\Http\RequestReceived;
 use WebApp\Events\Http\ResponseReady;
+use WebApp\Validation\RequestValidator;
+use App\Http\Requests\FormRequest;
 
 final class Kernel
 {
@@ -28,7 +30,8 @@ final class Kernel
         private readonly array $globalMiddleware = [],
         private readonly ?ContainerInterface $container = null,
         private readonly ?MiddlewareRegistry $registry = null,
-        private readonly ?EventDispatcherInterface $events = null
+        private readonly ?EventDispatcherInterface $events = null,
+        private readonly ?RequestValidator $validator = null
     ) {
     }
 
@@ -100,7 +103,8 @@ final class Kernel
             if (is_string($class) && is_string($method)) {
                 return function (Request $request) use ($class, $method): Response {
                     $instance = $this->container ? $this->container->get($class) : new $class();
-                    $response = $instance->{$method}($request);
+                    $args = $this->resolveControllerArguments($instance, $method, $request);
+                    $response = $instance->{$method}(...$args);
                     return $response;
                 };
             }
@@ -110,7 +114,8 @@ final class Kernel
             [$class, $method] = explode('::', $controller, 2);
             return function (Request $request) use ($class, $method): Response {
                 $instance = $this->container ? $this->container->get($class) : new $class();
-                $response = $instance->{$method}($request);
+                $args = $this->resolveControllerArguments($instance, $method, $request);
+                $response = $instance->{$method}(...$args);
                 return $response;
             };
         }
@@ -156,6 +161,58 @@ final class Kernel
         }
 
         return $out;
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function resolveControllerArguments(object $controller, string $method, Request $request): array
+    {
+        try {
+            $ref = new \ReflectionMethod($controller, $method);
+        } catch (\ReflectionException) {
+            // Fall back to the legacy signature.
+            return [$request];
+        }
+
+        $args = [];
+        foreach ($ref->getParameters() as $param) {
+            $type = $param->getType();
+            $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : null;
+
+            if ($typeName === Request::class || $typeName === 'Symfony\\Component\\HttpFoundation\\Request') {
+                $args[] = $request;
+                continue;
+            }
+
+            if (
+                $typeName !== null
+                && class_exists($typeName)
+                && is_subclass_of($typeName, FormRequest::class)
+                && $this->validator !== null
+            ) {
+                /** @var FormRequest $formRequest */
+                $formRequest = $this->container ? $this->container->get($typeName) : new $typeName();
+                $formRequest->setRequest($request);
+                $formRequest->validateResolved($this->validator);
+                $args[] = $formRequest;
+                continue;
+            }
+
+            if ($typeName !== null && class_exists($typeName) && $this->container) {
+                $args[] = $this->container->get($typeName);
+                continue;
+            }
+
+            if ($param->isDefaultValueAvailable()) {
+                $args[] = $param->getDefaultValue();
+                continue;
+            }
+
+            throw new HttpException(500, 'Cannot resolve controller argument: ' . $param->getName());
+        }
+
+        return $args;
     }
 }
 
