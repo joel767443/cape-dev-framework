@@ -20,7 +20,7 @@ If a controller action type-hints a `FormRequest`, the HTTP kernel will:
 
 ### Example
 
-See `app/Http/Requests/ValidateItemRequest.php` and the route `POST /api/items/validate` in `routes/api.php`.
+See `app/Http/Requests/ValidateExampleRequest.php` and the route `POST /api/validate` in `routes/api.php`.
 
 Your `FormRequest` returns Symfony constraints:
 

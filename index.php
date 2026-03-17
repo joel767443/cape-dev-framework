@@ -5,7 +5,6 @@
  */
 
 use WebApp\Application;
-use WebApp\Http\Controllers\ItemsController;
 
 require_once "autoload.php";
 

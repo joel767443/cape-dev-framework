@@ -66,12 +66,8 @@ Routes are defined in `routes/api.php`.
 | Method | Path | Description |
 |--------|------|-------------|
 | POST | `/api/auth/token` | Issue a JWT token |
-| GET | `/api/items` | List items (currently returns empty array) |
-| GET | `/api/item` | Show item (currently 501) |
-| POST | `/api/items/create` | Create item (currently 501) |
-| POST | `/api/items/update` | Update item (currently 501) |
-| GET | `/api/items/delete` | Delete item (currently 501) |
-| POST | `/api/items/validate` | Validation example (returns validated payload or 422) |
+| GET | `/api/secure/ping` | JWT-protected example endpoint |
+| POST | `/api/validate` | Validation example (returns validated payload or 422) |
 
 ## Backend architecture (source of truth)
 
