@@ -22,6 +22,7 @@ use WebApp\Console\Commands\QueueFailedCommand;
 use WebApp\Console\Commands\QueueFailedClearCommand;
 use WebApp\Console\Commands\QueueDispatchCommand;
 use WebApp\Queue\Dispatcher;
+use Illuminate\Database\ConnectionInterface;
 
 final class ConsoleKernel
 {
@@ -42,7 +43,8 @@ final class ConsoleKernel
         $this->console->addCommand(new MakeRequestCommand($writer));
         $this->console->addCommand(new MakeMigrationCommand($writer));
 
-        $this->console->addCommand(new MigrateCommand(Application::$ROOT_PATH));
+        $db = $this->app->container()->get(ConnectionInterface::class);
+        $this->console->addCommand(new MigrateCommand(Application::$ROOT_PATH, $db));
         $this->console->addCommand(new SeedCommand());
         $cache = $this->app->container()->get(CacheInterface::class);
         $this->console->addCommand(new CacheClearCommand(Application::$ROOT_PATH, $cache));

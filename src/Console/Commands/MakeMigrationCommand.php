@@ -57,16 +57,17 @@ final class MakeMigrationCommand extends Command
 namespace {$namespace};
 
 use App\\Database\\Migrations\\MigrationInterface;
-use WebApp\\Database\\Database;
+use Illuminate\\Database\\ConnectionInterface;
+use Illuminate\\Database\\Schema\\Builder;
 
 final class {$class} implements MigrationInterface
 {
-    public function up(Database \$db): void
+    public function up(Builder \$schema, ConnectionInterface \$db): void
     {
-        // TODO: Write migration SQL using \$db->pdo()->exec(...)
+        // TODO: Use \$schema->create() / \$schema->table() ...
     }
 
-    public function down(Database \$db): void
+    public function down(Builder \$schema, ConnectionInterface \$db): void
     {
         // TODO: Reverse migration
     }

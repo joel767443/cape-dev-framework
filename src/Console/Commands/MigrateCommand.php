@@ -7,14 +7,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WebApp\Console\Support\Paths;
-use WebApp\Database\Database;
+use Illuminate\Database\ConnectionInterface;
 use WebApp\Database\Migrations\MigrationLoader;
 use WebApp\Database\Migrations\MigrationRepository;
 use WebApp\Database\Migrations\Migrator;
 
 final class MigrateCommand extends Command
 {
-    public function __construct(private readonly string $rootPath)
+    public function __construct(
+        private readonly string $rootPath,
+        private readonly ConnectionInterface $db
+    )
     {
         parent::__construct('migrate');
     }
@@ -30,12 +33,11 @@ final class MigrateCommand extends Command
     {
         $dryRun = (bool) $input->getOption('dry-run');
 
-        $db = new Database();
-        $repo = new MigrationRepository($db);
+        $repo = new MigrationRepository($this->db);
         $loader = new MigrationLoader(Paths::appPath($this->rootPath, 'Database/Migrations'));
         $available = $loader->discover();
 
-        $migrator = new Migrator($db, $repo);
+        $migrator = new Migrator($this->db, $repo);
         $pending = $migrator->pending($available);
 
         if ($pending === []) {

@@ -22,6 +22,7 @@ A lightweight full-stack CRUD application with a custom PHP MVC framework on the
 - JSON API responses with proper CORS handling
 - Model layer with validation and CRUD operations
 - Database abstraction via PDO
+- Eloquent-style ORM (Illuminate Database) + fluent migrations
 - Vue 3 SPA with create, edit, and index views for items
 - Item properties: name, description, brand, color, price, availability, checked status
 
@@ -48,6 +49,32 @@ A lightweight full-stack CRUD application with a custom PHP MVC framework on the
    The backend will auto-create the SQLite database at `src/Database/cape-dev.sqlite` on first run (and seed it with sample items).
 
    To reset the database, delete `src/Database/cape-dev.sqlite` and start the server again.
+
+## ORM, Migrations, and DB-backed Validation (new)
+
+### Eloquent-style models
+- Base model lives at `app/Models/Model.php`.
+- Example model: `app/Models/User.php`.
+
+### Fluent migrations
+- Generate a migration:
+
+```bash
+php bin/console make:migration create_widgets_table
+```
+
+- Run migrations:
+
+```bash
+php bin/console migrate
+```
+
+### DB-backed validation rules
+Use Symfony Validator constraints in your `FormRequest`:
+- `WebApp\Validation\Constraints\Unique`
+- `WebApp\Validation\Constraints\Exists`
+
+They query the DB via the shared Illuminate connection and return 422 validation errors (same format as other `FormRequest` validation).
 
 3. **Configure the backend**
    ```bash

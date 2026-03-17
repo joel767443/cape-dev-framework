@@ -3,12 +3,12 @@
 namespace WebApp\Database\Migrations;
 
 use App\Database\Migrations\MigrationInterface;
-use WebApp\Database\Database;
+use Illuminate\Database\ConnectionInterface;
 
 final class Migrator
 {
     public function __construct(
-        private readonly Database $db,
+        private readonly ConnectionInterface $db,
         private readonly MigrationRepository $repo
     ) {
     }
@@ -44,6 +44,7 @@ final class Migrator
 
         $batch = $this->repo->lastBatch() + 1;
         $ran = 0;
+        $schema = $this->db->getSchemaBuilder();
 
         foreach ($pending as $m) {
             $name = $m['name'];
@@ -52,14 +53,14 @@ final class Migrator
             /** @var MigrationInterface $migration */
             $migration = new $class();
 
-            $this->db->pdo()->beginTransaction();
+            $this->db->beginTransaction();
             try {
-                $migration->up($this->db);
+                $migration->up($schema, $this->db);
                 $this->repo->log($name, $batch);
-                $this->db->pdo()->commit();
+                $this->db->commit();
                 $ran++;
             } catch (\Throwable $e) {
-                $this->db->pdo()->rollBack();
+                $this->db->rollBack();
                 throw $e;
             }
         }
