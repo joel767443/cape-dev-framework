@@ -8,8 +8,8 @@ A lightweight custom PHP backend (routing + middleware + DI + validation + migra
 - **HTTP layer**: Symfony HttpFoundation (`symfony/http-foundation`)
 - **DI container**: PHP-DI (`php-di/php-di`) + service providers (`src/Providers/*`)
 - **Validation**: Symfony Validator (`symfony/validator`) + `App\Requests\FormRequest`
-- **Database**: Eloquent/Illuminate Database (`illuminate/database`) + migrations (`php bin/console migrate`)
-- **ORM (optional)**: Doctrine ORM (`doctrine/orm`) with `php bin/console doctrine:schema:update`
+- **Database**: Eloquent/Illuminate Database (`illuminate/database`) + migrations (`php run migrate`)
+- **ORM (optional)**: Doctrine ORM (`doctrine/orm`) with `php run doctrine:schema:update`
 - **Outbound HTTP**: Guzzle (`guzzlehttp/guzzle`) via `WebApp\Http\Client\HttpClient`
 - **Auth**: JWT (`firebase/php-jwt`) middleware alias `auth_jwt` + token endpoint `POST /api/auth/token`
 - **Queue**: custom Redis queue + **optional** Symfony Messenger (`symfony/messenger`)
@@ -28,7 +28,7 @@ chmod +x bin/dev
 
 ### One-word CLI (`php run`)
 
-`bin/console` still works, but you can also run the console as:
+`run` still works, but you can also run the console as:
 
 ```bash
 php run
@@ -63,15 +63,15 @@ Routes are defined in `routes/api.php`.
 - **Middleware**: global middleware is wired in `src/Application.php`. Route middleware is attached per route (or via `Router::group()`) and resolved via `src/Http/Middleware/MiddlewareRegistry.php`.
 - **Validation**: request validation is Symfony Validator via `App\Requests\FormRequest` + `WebApp\Validation\RequestValidator`. If a controller action type-hints a `FormRequest`, it is automatically validated by the kernel before the controller runs.
 - **Database**: configured in `config/database.php` and wired via `src/Providers/DatabaseServiceProvider.php` (Illuminate Database / Eloquent).
-- **Migrations**: discovered in `app/Database/Migrations` and run via `php bin/console migrate`.
+- **Migrations**: discovered in `app/Database/Migrations` and run via `php run migrate`.
 
-## CLI (bin/console)
+## CLI (run)
 
 ```bash
-php bin/console route:list
-php bin/console make:request StoreItemRequest
-php bin/console make:migration create_items_table
-php bin/console migrate
+php run route:list
+php run make:request StoreItemRequest
+php run make:migration create_items_table
+php run migrate
 ```
 
 ## Docs

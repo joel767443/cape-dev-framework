@@ -34,6 +34,6 @@ Common env vars:
 - List backend routes:
 
 ```bash
-php bin/console route:list
+php run route:list
 ```
 

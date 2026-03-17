@@ -31,19 +31,19 @@ Migrations are discovered from:
 ### Running migrations
 
 ```bash
-php bin/console migrate
+php run migrate
 ```
 
 Dry-run pending migrations:
 
 ```bash
-php bin/console migrate --dry-run
+php run migrate --dry-run
 ```
 
 ### Creating migrations
 
 ```bash
-php bin/console make:migration create_widgets_table
+php run make:migration create_widgets_table
 ```
 
 The command writes a migration class under `app/Database/Migrations`.
@@ -56,8 +56,8 @@ This project also supports Doctrine ORM as an **opt-in** alternative to Eloquent
 - **Schema update command**:
 
 ```bash
-php bin/console doctrine:schema:update --dump-sql
-php bin/console doctrine:schema:update --force
+php run doctrine:schema:update --dump-sql
+php run doctrine:schema:update --force
 ```
 
 Configuration is under `config/database.php` → `database.doctrine.*` and environment variables like `DOCTRINE_SQLITE_PATH`.

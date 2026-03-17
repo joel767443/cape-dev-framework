@@ -9,9 +9,9 @@ Implemented in `src/Queue/*` and wired by `src/Providers/QueueServiceProvider.ph
 Commands:
 
 ```bash
-php bin/console queue:dispatch App/Jobs/LogMessageJob
-php bin/console queue:run
-php bin/console queue:work
+php run queue:dispatch App/Jobs/LogMessageJob
+php run queue:run
+php run queue:work
 ```
 
 ## 2) Symfony Messenger (optional)
@@ -26,7 +26,7 @@ Transport selection (env var `MESSENGER_TRANSPORT`):
 Consume messages:
 
 ```bash
-php bin/console messenger:consume --limit=10
+php run messenger:consume --limit=10
 ```
 
 Note: Redis transport requires the PHP `ext-redis` extension, which is not assumed by this repo.
