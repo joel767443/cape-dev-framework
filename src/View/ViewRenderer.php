@@ -1,0 +1,23 @@
+<?php
+
+namespace WebApp\View;
+
+use Illuminate\Contracts\View\Factory as ViewFactory;
+
+final class ViewRenderer
+{
+    public function __construct(private readonly ViewFactory $views)
+    {
+    }
+
+    /**
+     * Render a Blade view to a string.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function render(string $name, array $data = []): string
+    {
+        return $this->views->make($name, $data)->render();
+    }
+}
+

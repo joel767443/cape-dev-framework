@@ -22,6 +22,7 @@ use WebApp\Providers\EventsServiceProvider;
 use WebApp\Providers\CacheServiceProvider;
 use WebApp\Providers\QueueServiceProvider;
 use WebApp\Providers\DatabaseServiceProvider;
+use WebApp\Providers\ViewServiceProvider;
 use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\CorsMiddleware;
@@ -68,7 +69,10 @@ class Application
             new CacheServiceProvider(),
             new QueueServiceProvider(),
             new DatabaseServiceProvider(),
+            new ViewServiceProvider(),
         ]);
+
+        $GLOBALS['__webapp_container'] = $this->container;
 
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
         $this->router = new Router(new \WebApp\Http\Requests\Request(), new \WebApp\Http\Responses\Response());

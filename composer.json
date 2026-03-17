@@ -4,6 +4,8 @@
   "require": {
     "php": ">=8.1",
     "illuminate/database": "^12.54",
+    "illuminate/filesystem": "^12.54",
+    "illuminate/view": "^12.54",
     "monolog/monolog": "^3.10",
     "php-di/php-di": "^7.1",
     "predis/predis": "^3.4",

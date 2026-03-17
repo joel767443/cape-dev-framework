@@ -1,0 +1,3 @@
+[2026-03-17T13:47:10.473924+00:00] app.INFO: http.request_received {"method":"GET","path":"/api/items"} []
+[2026-03-17T13:47:10.479516+00:00] app.INFO: http.controller_resolved {"controller":"WebApp\\Http\\Controllers\\ItemsController::index"} []
+[2026-03-17T13:47:10.482162+00:00] app.INFO: http.response_ready {"status":200} []
