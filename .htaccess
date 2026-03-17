@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # If the requested URL is not a file
+    RewriteCond %{REQUEST_FILENAME} !-f
+    # If the requested URL is not a directory
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # Rewrite the URL to the index.php file inside the "api" subfolder
+    RewriteRule ^(.*)$ /api/index.php?url=$1 [QSA,L]
+</IfModule>

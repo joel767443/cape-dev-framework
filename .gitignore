@@ -1,0 +1,6 @@
+.idea
+config.php
+front-end/src/config.js
+node_modules/
+vendor/
+.DS_Store
