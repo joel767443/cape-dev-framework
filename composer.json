@@ -18,7 +18,7 @@
     "symfony/console": "^8.0",
     "symfony/event-dispatcher": "^8.0",
     "symfony/http-foundation": "^8.0",
-    "symfony/messenger": "^6.2",
+    "symfony/messenger": "^8.0",
     "symfony/routing": "^8.0",
     "symfony/validator": "^8.0",
     "symfony/var-exporter": "^7.0",
