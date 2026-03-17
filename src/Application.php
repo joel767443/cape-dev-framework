@@ -18,10 +18,12 @@ use WebApp\Providers\HttpServiceProvider;
 use WebApp\Providers\RoutingServiceProvider;
 use WebApp\Providers\ValidationServiceProvider;
 use WebApp\Providers\LoggingServiceProvider;
+use WebApp\Providers\EventsServiceProvider;
 use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\CorsMiddleware;
 use WebApp\Http\Middleware\ErrorLoggingMiddleware;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Application
@@ -58,6 +60,7 @@ class Application
             new RoutingServiceProvider(),
             new LoggingServiceProvider(),
             new ValidationServiceProvider(),
+            new EventsServiceProvider(),
         ]);
 
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
@@ -73,7 +76,8 @@ class Application
             ]
             ,
             $this->container,
-            $this->container->get(MiddlewareRegistry::class)
+            $this->container->get(MiddlewareRegistry::class),
+            $this->container->get(EventDispatcherInterface::class)
         );
     }
 

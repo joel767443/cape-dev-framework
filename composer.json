@@ -6,6 +6,7 @@
     "monolog/monolog": "^3.10",
     "php-di/php-di": "^7.1",
     "symfony/console": "^8.0",
+    "symfony/event-dispatcher": "^8.0",
     "symfony/http-foundation": "^8.0",
     "symfony/routing": "^8.0",
     "symfony/validator": "^8.0",

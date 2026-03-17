@@ -4,6 +4,7 @@ namespace WebApp\Http;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -13,6 +14,9 @@ use WebApp\Http\Exception\NotFoundHttpException;
 use WebApp\Http\Middleware\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
 use WebApp\Http\Middleware\MiddlewareRegistry;
+use WebApp\Events\Http\ControllerResolved;
+use WebApp\Events\Http\RequestReceived;
+use WebApp\Events\Http\ResponseReady;
 
 final class Kernel
 {
@@ -23,12 +27,14 @@ final class Kernel
         private readonly RouteCollection $routes,
         private readonly array $globalMiddleware = [],
         private readonly ?ContainerInterface $container = null,
-        private readonly ?MiddlewareRegistry $registry = null
+        private readonly ?MiddlewareRegistry $registry = null,
+        private readonly ?EventDispatcherInterface $events = null
     ) {
     }
 
     public function handle(Request $request): Response
     {
+        $this->events?->dispatch(new RequestReceived($request));
         return $this->buildPipeline($this->globalMiddleware, fn (Request $r) => $this->dispatch($r))($request);
     }
 
@@ -67,6 +73,8 @@ final class Kernel
             throw new HttpException(500, 'Controller not configured');
         }
 
+        $this->events?->dispatch(new ControllerResolved($request, $controller));
+
         $callable = $this->normalizeController($controller);
         $response = $callable($request);
 
@@ -74,6 +82,7 @@ final class Kernel
             throw new HttpException(500, 'Controller must return a Response');
         }
 
+        $this->events?->dispatch(new ResponseReady($request, $response));
         return $response;
     }
 
