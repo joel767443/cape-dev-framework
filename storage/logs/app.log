@@ -207,3 +207,6 @@
 [2026-03-17T16:38:43.494086+00:00] app.INFO: http.request_received {"method":"GET","path":"/"} []
 [2026-03-17T16:38:43.494508+00:00] app.INFO: http.controller_resolved {"controller":"WebApp\\Http\\Controllers\\HomeController::index"} []
 [2026-03-17T16:38:43.496590+00:00] app.INFO: http.response_ready {"status":200} []
+[2026-03-17T16:50:13.170119+00:00] app.INFO: http.request_received {"method":"GET","path":"/"} []
+[2026-03-17T16:50:13.170600+00:00] app.INFO: http.controller_resolved {"controller":"WebApp\\Http\\Controllers\\HomeController::index"} []
+[2026-03-17T16:50:13.174563+00:00] app.INFO: http.response_ready {"status":200} []
