@@ -3,9 +3,18 @@
 namespace WebApp\Queue;
 
 use Predis\Client as PredisClient;
+use Throwable;
 
+/**
+ *
+ */
 final class RedisQueue implements QueueInterface
 {
+    /**
+     * @param PredisClient $redis
+     * @param string $prefix
+     * @param string $defaultQueue
+     */
     public function __construct(
         private readonly PredisClient $redis,
         private readonly string $prefix,
@@ -13,6 +22,11 @@ final class RedisQueue implements QueueInterface
     ) {
     }
 
+    /**
+     * @param JobInterface $job
+     * @param string|null $queue
+     * @return void
+     */
     public function push(JobInterface $job, ?string $queue = null): void
     {
         $queue = $queue ?: $this->defaultQueue;
@@ -20,6 +34,12 @@ final class RedisQueue implements QueueInterface
         $this->redis->lpush($this->queueKey($queue), [$payload]);
     }
 
+    /**
+     * @param int $delaySeconds
+     * @param JobInterface $job
+     * @param string|null $queue
+     * @return void
+     */
     public function later(int $delaySeconds, JobInterface $job, ?string $queue = null): void
     {
         $queue = $queue ?: $this->defaultQueue;
@@ -28,6 +48,11 @@ final class RedisQueue implements QueueInterface
         $this->redis->zadd($this->delayedKey($queue), [$payload => $availableAt]);
     }
 
+    /**
+     * @param string|null $queue
+     * @param int $timeoutSeconds
+     * @return QueuedJob|null
+     */
     public function pop(?string $queue = null, int $timeoutSeconds = 5): ?QueuedJob
     {
         $queue = $queue ?: $this->defaultQueue;
@@ -86,7 +111,7 @@ final class RedisQueue implements QueueInterface
     /**
      * @param array<string, mixed> $payload
      */
-    public function fail(string $queue, string $jobClass, array $payload, int $attempts, \Throwable $e): void
+    public function fail(string $queue, string $jobClass, array $payload, int $attempts, Throwable $e): void
     {
         $this->pushFailed($queue, [
             'job' => $jobClass,
@@ -107,16 +132,19 @@ final class RedisQueue implements QueueInterface
         $items = $this->redis->lrange($key, 0, max(0, $limit - 1));
         $out = [];
         foreach ($items as $raw) {
-            $decoded = json_decode((string) $raw, true);
-            $out[] = is_array($decoded) ? $decoded : ['raw' => (string) $raw];
+            $decoded = json_decode($raw, true);
+            $out[] = is_array($decoded) ? $decoded : ['raw' => $raw];
         }
         return $out;
     }
 
+    /**
+     * @return int
+     */
     public function clearFailed(): int
     {
         $key = $this->failedKey();
-        $count = (int) $this->redis->llen($key);
+        $count = $this->redis->llen($key);
         $this->redis->del([$key]);
         return $count;
     }

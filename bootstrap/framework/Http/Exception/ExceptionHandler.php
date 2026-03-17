@@ -5,14 +5,26 @@ namespace WebApp\Http\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
+/**
+ *
+ */
 final class ExceptionHandler
 {
+    /**
+     * @param bool $debug
+     */
     public function __construct(private readonly bool $debug = false)
     {
     }
 
-    public function render(Request $request, \Throwable $e): Response
+    /**
+     * @param Request $request
+     * @param Throwable $e
+     * @return Response
+     */
+    public function render(Request $request, Throwable $e): Response
     {
         $wantsJson = $this->wantsJson($request);
 

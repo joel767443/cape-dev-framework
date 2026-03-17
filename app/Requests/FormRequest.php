@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraint;
 use WebApp\Validation\RequestValidator;
 
+/**
+ *
+ */
 abstract class FormRequest
 {
     private ?Request $request = null;
@@ -15,13 +18,23 @@ abstract class FormRequest
      */
     private array $validated = [];
 
+    /**
+     * @return Constraint|array
+     */
     abstract public function constraints(): Constraint|array;
 
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function setRequest(Request $request): void
     {
         $this->request = $request;
     }
 
+    /**
+     * @return Request
+     */
     public function request(): Request
     {
         if (!$this->request) {

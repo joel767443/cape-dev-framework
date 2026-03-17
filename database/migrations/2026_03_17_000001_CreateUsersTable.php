@@ -6,8 +6,16 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 
+/**
+ *
+ */
 final class CreateUsersTable implements MigrationInterface
 {
+    /**
+     * @param Builder $schema
+     * @param ConnectionInterface $db
+     * @return void
+     */
     public function up(Builder $schema, ConnectionInterface $db): void
     {
         $schema->create('users', function (Blueprint $table) {
@@ -18,6 +26,11 @@ final class CreateUsersTable implements MigrationInterface
         });
     }
 
+    /**
+     * @param Builder $schema
+     * @param ConnectionInterface $db
+     * @return void
+     */
     public function down(Builder $schema, ConnectionInterface $db): void
     {
         $schema->dropIfExists('users');

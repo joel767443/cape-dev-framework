@@ -8,13 +8,22 @@ use GuzzleHttp\ClientInterface;
 use Psr\Container\ContainerInterface;
 use WebApp\Container\ServiceProviderInterface;
 use WebApp\Http\Client\HttpClient;
+use function DI\autowire;
+use function DI\factory;
 
+/**
+ *
+ */
 final class HttpClientServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            ClientInterface::class => \DI\factory(function (): ClientInterface {
+            ClientInterface::class => factory(function (): ClientInterface {
                 $baseUri = (string) config('http.base_uri', '');
                 $timeout = (float) config('http.timeout', 10.0);
 
@@ -30,10 +39,14 @@ final class HttpClientServiceProvider implements ServiceProviderInterface
                 return new Client($opts);
             }),
 
-            HttpClient::class => \DI\autowire(HttpClient::class),
+            HttpClient::class => autowire(HttpClient::class),
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
     public function boot(ContainerInterface $container): void
     {
     }

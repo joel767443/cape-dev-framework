@@ -1,5 +1,8 @@
 <?php
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use WebApp\Application;
 use WebApp\Config\ConfigRepository;
 use WebApp\View\ViewRenderer;
 use Psr\Container\ContainerInterface;
@@ -8,7 +11,9 @@ use Ramsey\Uuid\Uuid;
 
 if (!function_exists('config')) {
     /**
+     * @param string $key
      * @param mixed $default
+     * @return mixed
      */
     function config(string $key, mixed $default = null): mixed
     {
@@ -21,6 +26,12 @@ if (!function_exists('config')) {
 }
 
 if (!function_exists('app')) {
+    /**
+     * @param string|null $id
+     * @return mixed
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     function app(?string $id = null): mixed
     {
         $container = $GLOBALS['__webapp_container'] ?? null;
@@ -40,7 +51,11 @@ if (!function_exists('view')) {
     /**
      * Render a Blade view to a string.
      *
+     * @param string $name
      * @param array<string, mixed> $data
+     * @return string
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     function view(string $name, array $data = []): string
     {
@@ -51,6 +66,9 @@ if (!function_exists('view')) {
 }
 
 if (!function_exists('now')) {
+    /**
+     * @return CarbonImmutable
+     */
     function now(): CarbonImmutable
     {
         return CarbonImmutable::now();
@@ -58,6 +76,9 @@ if (!function_exists('now')) {
 }
 
 if (!function_exists('uuid')) {
+    /**
+     * @return string
+     */
     function uuid(): string
     {
         return Uuid::uuid4()->toString();
@@ -65,9 +86,13 @@ if (!function_exists('uuid')) {
 }
 
 if (!function_exists('base_path')) {
+    /**
+     * @param string $path
+     * @return string
+     */
     function base_path(string $path = ''): string
     {
-        $root = (string) (\WebApp\Application::$ROOT_PATH ?? '');
+        $root = Application::$ROOT_PATH ?? '';
         if ($root === '') {
             $root = getcwd() ?: '';
         }

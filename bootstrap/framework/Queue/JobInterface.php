@@ -4,6 +4,9 @@ namespace WebApp\Queue;
 
 use Psr\Container\ContainerInterface;
 
+/**
+ *
+ */
 interface JobInterface
 {
     /**

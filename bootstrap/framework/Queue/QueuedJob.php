@@ -2,6 +2,9 @@
 
 namespace WebApp\Queue;
 
+/**
+ *
+ */
 final class QueuedJob
 {
     /**

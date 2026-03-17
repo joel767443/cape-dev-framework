@@ -2,18 +2,28 @@
 
 namespace WebApp\Console\Commands;
 
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ *
+ */
 final class DevCommand extends Command
 {
+    /**
+     * @param string $rootPath
+     */
     public function __construct(private readonly string $rootPath)
     {
         parent::__construct('dev');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -21,6 +31,11 @@ final class DevCommand extends Command
             ->addOption('backend', null, InputOption::VALUE_REQUIRED, 'Backend host:port', 'localhost:8001');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $backend = (string) $input->getOption('backend');
@@ -55,7 +70,7 @@ final class DevCommand extends Command
 
         $proc = proc_open($cmd, $descriptors, $pipes, $cwd);
         if (!is_resource($proc)) {
-            throw new \RuntimeException('Failed to start process: ' . implode(' ', $cmd));
+            throw new RuntimeException('Failed to start process: ' . implode(' ', $cmd));
         }
 
         foreach ([1, 2] as $i) {
@@ -72,6 +87,10 @@ final class DevCommand extends Command
         return $proc;
     }
 
+    /**
+     * @param $proc
+     * @return void
+     */
     private function terminate($proc): void
     {
         if (is_resource($proc)) {

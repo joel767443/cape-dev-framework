@@ -2,6 +2,9 @@
 
 namespace WebApp\Config;
 
+/**
+ *
+ */
 final class ConfigLoader
 {
     /**

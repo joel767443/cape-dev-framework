@@ -11,13 +11,22 @@ use WebApp\Console\Support\CodeWriter;
 use WebApp\Console\Support\Naming;
 use WebApp\Console\Support\Paths;
 
+/**
+ *
+ */
 final class MakeModelCommand extends Command
 {
+    /**
+     * @param CodeWriter $writer
+     */
     public function __construct(private readonly CodeWriter $writer)
     {
         parent::__construct('make:model');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -27,6 +36,11 @@ final class MakeModelCommand extends Command
             ->addOption('table', 't', InputOption::VALUE_REQUIRED, 'Explicit table name (optional)');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = (string) $input->getArgument('name');

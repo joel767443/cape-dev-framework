@@ -4,9 +4,17 @@ namespace WebApp\Database\Migrations;
 
 use App\Database\Migrations\MigrationInterface;
 use Illuminate\Database\ConnectionInterface;
+use Throwable;
 
+/**
+ *
+ */
 final class Migrator
 {
+    /**
+     * @param ConnectionInterface $db
+     * @param MigrationRepository $repo
+     */
     public function __construct(
         private readonly ConnectionInterface $db,
         private readonly MigrationRepository $repo
@@ -34,6 +42,8 @@ final class Migrator
 
     /**
      * @param array<int, array{name: string, class: class-string<MigrationInterface>}> $pending
+     * @return int
+     * @throws Throwable
      */
     public function run(array $pending): int
     {
@@ -59,7 +69,7 @@ final class Migrator
                 $this->repo->log($name, $batch);
                 $this->db->commit();
                 $ran++;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->db->rollBack();
                 throw $e;
             }

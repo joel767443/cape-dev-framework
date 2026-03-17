@@ -5,18 +5,29 @@ namespace WebApp\Providers;
 use DI\ContainerBuilder;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\ConnectionInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use WebApp\Application;
 use WebApp\Container\ServiceProviderInterface;
+use function DI\factory;
 
+/**
+ *
+ */
 final class DatabaseServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            Capsule::class => \DI\factory(function (): Capsule {
+            Capsule::class => factory(function (): Capsule {
                 $capsule = new Capsule();
 
-                $root = (string) \WebApp\Application::$ROOT_PATH;
+                $root = Application::$ROOT_PATH;
                 $cfg = (array) config('database', []);
                 $default = (string) ($cfg['default'] ?? 'sqlite');
                 $connections = (array) ($cfg['connections'] ?? []);
@@ -48,7 +59,7 @@ final class DatabaseServiceProvider implements ServiceProviderInterface
                 return $capsule;
             }),
 
-            ConnectionInterface::class => \DI\factory(function (ContainerInterface $c): ConnectionInterface {
+            ConnectionInterface::class => factory(function (ContainerInterface $c): ConnectionInterface {
                 /** @var Capsule $capsule */
                 $capsule = $c->get(Capsule::class);
                 $default = (string) config('database.default', 'sqlite');
@@ -57,6 +68,12 @@ final class DatabaseServiceProvider implements ServiceProviderInterface
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function boot(ContainerInterface $container): void
     {
         // Instantiate to ensure connection is bootstrapped early.

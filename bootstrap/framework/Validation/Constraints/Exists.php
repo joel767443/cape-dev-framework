@@ -2,13 +2,25 @@
 
 namespace WebApp\Validation\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+/**
+ *
+ */
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Exists extends Constraint
 {
     public string $message = 'This value does not exist.';
 
+    /**
+     * @param string $table
+     * @param string $column
+     * @param string|null $message
+     * @param mixed|null $options
+     * @param array|null $groups
+     * @param mixed|null $payload
+     */
     public function __construct(
         public readonly string $table,
         public readonly string $column = 'id',
@@ -23,6 +35,9 @@ final class Exists extends Constraint
         }
     }
 
+    /**
+     * @return string
+     */
     public function validatedBy(): string
     {
         return ExistsValidator::class;

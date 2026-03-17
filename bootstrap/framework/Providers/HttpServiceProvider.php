@@ -3,7 +3,9 @@
 namespace WebApp\Providers;
 
 use DI\ContainerBuilder;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use WebApp\Container\ServiceProviderInterface;
 use WebApp\Http\Exception\ExceptionHandler;
 use WebApp\Http\Middleware\CorsMiddleware;
@@ -11,25 +13,41 @@ use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
 use WebApp\Http\Middleware\ErrorLoggingMiddleware;
 use WebApp\Http\Middleware\MiddlewareRegistry;
 use WebApp\Http\Middleware\AuthJwtMiddleware;
+use function DI\autowire;
+use function DI\create;
+use function DI\factory;
 
+/**
+ *
+ */
 final class HttpServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            MiddlewareRegistry::class => \DI\create(MiddlewareRegistry::class),
+            MiddlewareRegistry::class => create(MiddlewareRegistry::class),
 
-            ExceptionHandler::class => \DI\factory(function (): ExceptionHandler {
+            ExceptionHandler::class => factory(function (): ExceptionHandler {
                 return new ExceptionHandler((bool) config('app.debug', false));
             }),
 
-            ExceptionHandlingMiddleware::class => \DI\autowire(ExceptionHandlingMiddleware::class),
-            CorsMiddleware::class => \DI\autowire(CorsMiddleware::class),
-            ErrorLoggingMiddleware::class => \DI\autowire(ErrorLoggingMiddleware::class),
-            AuthJwtMiddleware::class => \DI\autowire(AuthJwtMiddleware::class),
+            ExceptionHandlingMiddleware::class => autowire(ExceptionHandlingMiddleware::class),
+            CorsMiddleware::class => autowire(CorsMiddleware::class),
+            ErrorLoggingMiddleware::class => autowire(ErrorLoggingMiddleware::class),
+            AuthJwtMiddleware::class => autowire(AuthJwtMiddleware::class),
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function boot(ContainerInterface $container): void
     {
         /** @var MiddlewareRegistry $registry */

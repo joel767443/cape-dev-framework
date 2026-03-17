@@ -11,13 +11,22 @@ use WebApp\Console\Support\CodeWriter;
 use WebApp\Console\Support\Naming;
 use WebApp\Console\Support\Paths;
 
+/**
+ *
+ */
 final class MakeControllerCommand extends Command
 {
+    /**
+     * @param CodeWriter $writer
+     */
     public function __construct(private readonly CodeWriter $writer)
     {
         parent::__construct('make:controller');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -26,6 +35,11 @@ final class MakeControllerCommand extends Command
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overwrite the file if it already exists');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = (string) $input->getArgument('name');

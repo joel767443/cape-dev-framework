@@ -4,6 +4,9 @@ namespace WebApp\Http\Middleware;
 
 use InvalidArgumentException;
 
+/**
+ *
+ */
 final class MiddlewareRegistry
 {
     /**

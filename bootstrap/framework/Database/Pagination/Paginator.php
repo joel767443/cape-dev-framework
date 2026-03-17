@@ -5,6 +5,9 @@ namespace WebApp\Database\Pagination;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
+/**
+ *
+ */
 final class Paginator
 {
     /**

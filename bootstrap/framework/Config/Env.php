@@ -4,8 +4,15 @@ namespace WebApp\Config;
 
 use Dotenv\Dotenv;
 
+/**
+ *
+ */
 final class Env
 {
+    /**
+     * @param string $rootPath
+     * @return void
+     */
     public static function load(string $rootPath): void
     {
         $dotenvPath = rtrim($rootPath, DIRECTORY_SEPARATOR);

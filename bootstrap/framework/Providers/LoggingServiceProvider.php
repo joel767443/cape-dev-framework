@@ -8,13 +8,21 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use WebApp\Container\ServiceProviderInterface;
+use function DI\factory;
 
+/**
+ *
+ */
 final class LoggingServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            LoggerInterface::class => \DI\factory(function (): LoggerInterface {
+            LoggerInterface::class => factory(function (): LoggerInterface {
                 $path = (string) config('logging.path', 'storage/logs/app.log');
                 $levelName = (string) config('logging.level', 'info');
 
@@ -25,6 +33,10 @@ final class LoggingServiceProvider implements ServiceProviderInterface
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
     public function boot(ContainerInterface $container): void
     {
     }

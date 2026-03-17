@@ -2,8 +2,15 @@
 
 namespace WebApp\Console\Support;
 
+/**
+ *
+ */
 final class Naming
 {
+    /**
+     * @param string $value
+     * @return string
+     */
     public static function studly(string $value): string
     {
         $value = trim($value);
@@ -19,13 +26,16 @@ final class Naming
         return implode('', $parts);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public static function normalizeClass(string $name): string
     {
         $name = trim($name);
         $name = trim($name, "\\/ \t\n\r\0\x0B");
         $name = str_replace('/', '\\', $name);
-        $name = preg_replace('/\\\\+/', '\\', $name) ?? $name;
-        return $name;
+        return preg_replace('/\\\\+/', '\\', $name) ?? $name;
     }
 
     /**

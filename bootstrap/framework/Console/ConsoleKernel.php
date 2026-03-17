@@ -2,6 +2,8 @@
 
 namespace WebApp\Console;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use WebApp\Application;
 use WebApp\Console\Commands\MakeControllerCommand;
@@ -31,14 +33,26 @@ use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use WebApp\Console\Commands\MessengerConsumeCommand;
 use WebApp\Console\Commands\DevCommand;
 
+/**
+ *
+ */
 final class ConsoleKernel
 {
+    /**
+     * @param Application $app
+     * @param SymfonyConsole $console
+     */
     public function __construct(
         private readonly Application $app,
         private readonly SymfonyConsole $console
     ) {
     }
 
+    /**
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function register(): void
     {
         $writer = new CodeWriter(Application::$ROOT_PATH);

@@ -14,8 +14,16 @@ use Symfony\Component\HttpFoundation\Response;
 use WebApp\Auth\Jwt\JwtService;
 use WebApp\Http\Exception\HttpException;
 
+/**
+ *
+ */
 final class AuthController
 {
+    /**
+     * @param Request $request
+     * @param JwtService $jwt
+     * @return Response
+     */
     public function token(Request $request, JwtService $jwt): Response
     {
         $raw = (string) $request->getContent();
@@ -45,6 +53,10 @@ final class AuthController
         ], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function ping(Request $request): Response
     {
         return new JsonResponse([
@@ -57,6 +69,12 @@ final class AuthController
         ], 200);
     }
 
+    /**
+     * @param RegisterRequest $request
+     * @param JwtService $jwt
+     * @param EventDispatcherInterface $events
+     * @return Response
+     */
     public function register(RegisterRequest $request, JwtService $jwt, EventDispatcherInterface $events): Response
     {
         $data = $request->validated();
@@ -102,6 +120,11 @@ final class AuthController
         ], 201);
     }
 
+    /**
+     * @param LoginRequest $request
+     * @param JwtService $jwt
+     * @return Response
+     */
     public function login(LoginRequest $request, JwtService $jwt): Response
     {
         $data = $request->validated();
@@ -139,6 +162,10 @@ final class AuthController
         ], 200);
     }
 
+    /**
+     * @param ValidateExampleRequest $request
+     * @return Response
+     */
     public function validateExample(ValidateExampleRequest $request): Response
     {
         return new JsonResponse([

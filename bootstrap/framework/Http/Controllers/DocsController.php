@@ -7,14 +7,25 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WebApp\Application;
 
+/**
+ *
+ */
 final class DocsController
 {
+    /**
+     * @return Response
+     */
     public function index(): Response
     {
         return $this->renderDoc('README.md');
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function show(Request $request): Response
     {
         $page = (string) $request->attributes->get('page', '');
@@ -32,7 +43,7 @@ final class DocsController
 
     private function renderDoc(string $filename): Response
     {
-        $root = (string) \WebApp\Application::$ROOT_PATH;
+        $root = Application::$ROOT_PATH;
         $docsDir = $root . DIRECTORY_SEPARATOR . 'docs';
 
         $filename = str_replace(['\\', '..'], ['/', ''], $filename);

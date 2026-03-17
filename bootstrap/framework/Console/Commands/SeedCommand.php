@@ -9,6 +9,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WebApp\Database\Database;
 
+/**
+ *
+ */
 final class SeedCommand extends Command
 {
     public function __construct()
@@ -16,6 +19,9 @@ final class SeedCommand extends Command
         parent::__construct('seed');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -23,6 +29,11 @@ final class SeedCommand extends Command
             ->addOption('class', null, InputOption::VALUE_REQUIRED, 'Seeder class to run', 'App\\Database\\Seeders\\DatabaseSeeder');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $class = (string) $input->getOption('class');

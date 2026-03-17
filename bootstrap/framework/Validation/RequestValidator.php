@@ -7,8 +7,14 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use WebApp\Http\Exception\HttpException;
 
+/**
+ *
+ */
 final class RequestValidator
 {
+    /**
+     * @param ValidatorInterface $validator
+     */
     public function __construct(private readonly ValidatorInterface $validator)
     {
     }

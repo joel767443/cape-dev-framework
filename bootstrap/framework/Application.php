@@ -6,6 +6,8 @@
 
 namespace WebApp;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WebApp\Container\ContainerFactory;
@@ -52,6 +54,8 @@ class Application
 
     /**
      * @param $rootPath
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct($rootPath)
     {
@@ -61,7 +65,7 @@ class Application
 
         $configRepo = new ConfigRepository();
         $configLoader = new ConfigLoader();
-        $configRepo->setMany($configLoader->loadDir((string) $rootPath . DIRECTORY_SEPARATOR . 'config'));
+        $configRepo->setMany($configLoader->loadDir($rootPath . DIRECTORY_SEPARATOR . 'config'));
         $GLOBALS['__webapp_config'] = $configRepo;
 
         $this->container = ContainerFactory::build([
@@ -101,6 +105,9 @@ class Application
         );
     }
 
+    /**
+     * @return ContainerInterface
+     */
     public function container(): ContainerInterface
     {
         return $this->container;

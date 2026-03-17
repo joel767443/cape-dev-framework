@@ -8,15 +8,24 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
+use WebApp\Application;
 use WebApp\Container\ServiceProviderInterface;
+use function DI\factory;
 
+/**
+ *
+ */
 final class DoctrineServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            EntityManagerInterface::class => \DI\factory(function (): EntityManagerInterface {
-                $root = (string) \WebApp\Application::$ROOT_PATH;
+            EntityManagerInterface::class => factory(function (): EntityManagerInterface {
+                $root = Application::$ROOT_PATH;
                 $cfg = (array) config('database.doctrine', []);
 
                 $entitiesPath = (string) ($cfg['entities_path'] ?? 'app/Entities');
@@ -43,6 +52,10 @@ final class DoctrineServiceProvider implements ServiceProviderInterface
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
     public function boot(ContainerInterface $container): void
     {
         // No-op: Doctrine is opt-in; resolved on demand.

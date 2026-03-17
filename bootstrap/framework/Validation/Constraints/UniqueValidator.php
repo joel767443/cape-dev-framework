@@ -7,12 +7,23 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+/**
+ *
+ */
 final class UniqueValidator extends ConstraintValidator
 {
+    /**
+     * @param ConnectionInterface $db
+     */
     public function __construct(private readonly ConnectionInterface $db)
     {
     }
 
+    /**
+     * @param mixed $value
+     * @param Constraint $constraint
+     * @return void
+     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof Unique) {

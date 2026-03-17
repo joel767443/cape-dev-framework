@@ -7,8 +7,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ *
+ */
 final class CacheClearCommand extends Command
 {
+    /**
+     * @param string $rootPath
+     * @param CacheInterface $cache
+     */
     public function __construct(
         private readonly string $rootPath,
         private readonly CacheInterface $cache
@@ -17,11 +24,19 @@ final class CacheClearCommand extends Command
         parent::__construct('cache:clear');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setDescription('Clear application cache files.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Clear the active cache pool (Redis/filesystem, depending on config).

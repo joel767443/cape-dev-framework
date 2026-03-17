@@ -8,12 +8,21 @@ use WebApp\Events\Http\ControllerResolved;
 use WebApp\Events\Http\RequestReceived;
 use WebApp\Events\Http\ResponseReady;
 
+/**
+ *
+ */
 final class LogHttpRequestsSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param LoggerInterface $logger
+     */
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
 
+    /**
+     * @return string[]
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -23,6 +32,10 @@ final class LogHttpRequestsSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param RequestReceived $event
+     * @return void
+     */
     public function onRequestReceived(RequestReceived $event): void
     {
         $req = $event->request;
@@ -32,6 +45,10 @@ final class LogHttpRequestsSubscriber implements EventSubscriberInterface
         ]);
     }
 
+    /**
+     * @param ControllerResolved $event
+     * @return void
+     */
     public function onControllerResolved(ControllerResolved $event): void
     {
         $this->logger->info('http.controller_resolved', [
@@ -39,6 +56,10 @@ final class LogHttpRequestsSubscriber implements EventSubscriberInterface
         ]);
     }
 
+    /**
+     * @param ResponseReady $event
+     * @return void
+     */
     public function onResponseReady(ResponseReady $event): void
     {
         $this->logger->info('http.response_ready', [

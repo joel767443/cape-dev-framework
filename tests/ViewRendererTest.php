@@ -3,8 +3,14 @@
 use PHPUnit\Framework\TestCase;
 use WebApp\Application;
 
+/**
+ *
+ */
 final class ViewRendererTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testItRendersBladeTemplateWithVariables(): void
     {
         require_once __DIR__ . '/../autoload.php';

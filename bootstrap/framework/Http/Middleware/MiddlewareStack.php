@@ -2,6 +2,9 @@
 
 namespace WebApp\Http\Middleware;
 
+/**
+ *
+ */
 final class MiddlewareStack
 {
     /**

@@ -8,13 +8,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use WebApp\Queue\QueueInterface;
 
+/**
+ *
+ */
 final class QueueFailedCommand extends Command
 {
+    /**
+     * @param QueueInterface $queue
+     */
     public function __construct(private readonly QueueInterface $queue)
     {
         parent::__construct('queue:failed');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -22,6 +31,11 @@ final class QueueFailedCommand extends Command
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Max failed jobs to show', 20);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $limit = max(1, (int) $input->getOption('limit'));

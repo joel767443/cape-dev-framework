@@ -4,8 +4,14 @@ namespace WebApp\Database\Migrations;
 
 use App\Database\Migrations\MigrationInterface;
 
+/**
+ *
+ */
 final class MigrationLoader
 {
+    /**
+     * @param string $migrationsPath
+     */
     public function __construct(private readonly string $migrationsPath)
     {
     }

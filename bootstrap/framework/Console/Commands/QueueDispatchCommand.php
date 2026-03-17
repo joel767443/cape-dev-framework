@@ -10,23 +10,37 @@ use Symfony\Component\Console\Output\OutputInterface;
 use WebApp\Queue\Dispatcher;
 use WebApp\Queue\JobInterface;
 
+/**
+ *
+ */
 final class QueueDispatchCommand extends Command
 {
+    /**
+     * @param Dispatcher $dispatcher
+     */
     public function __construct(private readonly Dispatcher $dispatcher)
     {
         parent::__construct('queue:dispatch');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
             ->setDescription('Dispatch a job by class name (dev helper).')
             ->addArgument('job', InputArgument::REQUIRED, 'Job FQCN (must implement JobInterface)')
             ->addOption('payload', null, InputOption::VALUE_REQUIRED, 'JSON payload for Job::fromPayload()', '{}')
-            ->addOption('queue', null, InputOption::VALUE_REQUIRED, 'Queue name', null)
+            ->addOption('queue', null, InputOption::VALUE_REQUIRED, 'Queue name')
             ->addOption('delay', null, InputOption::VALUE_REQUIRED, 'Delay seconds', 0);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobClass = (string) $input->getArgument('job');

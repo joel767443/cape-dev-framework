@@ -7,13 +7,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ *
+ */
 final class RoutesListCommand extends Command
 {
+    /**
+     * @param RouteCollection $routes
+     */
     public function __construct(private readonly RouteCollection $routes)
     {
         parent::__construct('route:list');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -21,6 +30,11 @@ final class RoutesListCommand extends Command
             ->setAliases(['routes:list']);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->routes->all() as $name => $route) {

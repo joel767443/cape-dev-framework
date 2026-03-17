@@ -3,15 +3,24 @@
 namespace WebApp\Console\Commands;
 
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use WebApp\Queue\QueueInterface;
 use WebApp\Queue\RedisQueue;
 
+/**
+ *
+ */
 final class QueueRunCommand extends Command
 {
+    /**
+     * @param QueueInterface $queue
+     * @param ContainerInterface $container
+     */
     public function __construct(
         private readonly QueueInterface $queue,
         private readonly ContainerInterface $container
@@ -19,15 +28,24 @@ final class QueueRunCommand extends Command
         parent::__construct('queue:run');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
             ->setDescription('Run N queued jobs and exit (cron-friendly).')
-            ->addOption('queue', null, InputOption::VALUE_REQUIRED, 'Queue name', null)
+            ->addOption('queue', null, InputOption::VALUE_REQUIRED, 'Queue name')
             ->addOption('max', null, InputOption::VALUE_REQUIRED, 'Max jobs to process', 10)
             ->addOption('timeout', null, InputOption::VALUE_REQUIRED, 'BRPOP timeout seconds', 1);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws Throwable
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queueName = $input->getOption('queue');
@@ -48,11 +66,11 @@ final class QueueRunCommand extends Command
 
             try {
                 if (!class_exists($job->jobClass)) {
-                    throw new \RuntimeException("Job class not found: {$job->jobClass}");
+                    throw new RuntimeException("Job class not found: {$job->jobClass}");
                 }
                 $instance = $job->jobClass::fromPayload($job->payload);
                 $instance->handle($this->container);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $maxTries = (int) config('queue.max_tries', 3);
                 $retryAfter = (int) config('queue.retry_after', 5);
 

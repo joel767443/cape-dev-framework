@@ -4,12 +4,21 @@ namespace WebApp\Database\Migrations;
 
 use Illuminate\Database\ConnectionInterface;
 
+/**
+ *
+ */
 final class MigrationRepository
 {
+    /**
+     * @param ConnectionInterface $db
+     */
     public function __construct(private readonly ConnectionInterface $db)
     {
     }
 
+    /**
+     * @return void
+     */
     public function ensureTable(): void
     {
         $this->db->statement(
@@ -22,6 +31,9 @@ final class MigrationRepository
         );
     }
 
+    /**
+     * @return int
+     */
     public function lastBatch(): int
     {
         $this->ensureTable();
@@ -44,6 +56,11 @@ final class MigrationRepository
         return $applied;
     }
 
+    /**
+     * @param string $migration
+     * @param int $batch
+     * @return void
+     */
     public function log(string $migration, int $batch): void
     {
         $this->ensureTable();

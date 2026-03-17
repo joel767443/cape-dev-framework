@@ -3,17 +3,27 @@
 namespace WebApp\Http\Client;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ *
+ */
 final class HttpClient
 {
+    /**
+     * @param ClientInterface $client
+     */
     public function __construct(private readonly ClientInterface $client)
     {
     }
 
     /**
+     * @param string $method
+     * @param string $url
      * @param array<string, mixed> $options
      * @return array{status: int, headers: array<string, string[]>, body: string}
+     * @throws GuzzleException
      */
     public function request(string $method, string $url, array $options = []): array
     {
@@ -22,8 +32,11 @@ final class HttpClient
     }
 
     /**
+     * @param string $method
+     * @param string $url
      * @param array<string, mixed> $options
      * @return array{status: int, headers: array<string, string[]>, data: mixed, body: string}
+     * @throws GuzzleException
      */
     public function requestJson(string $method, string $url, array $options = []): array
     {

@@ -2,11 +2,22 @@
 
 namespace WebApp\Console;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use WebApp\Application;
 
+/**
+ *
+ */
 final class ConsoleApplicationFactory
 {
+    /**
+     * @param string $rootPath
+     * @return SymfonyConsole
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public static function create(string $rootPath): SymfonyConsole
     {
         $app = new Application($rootPath);

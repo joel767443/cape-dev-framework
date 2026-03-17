@@ -4,8 +4,14 @@ namespace WebApp\View;
 
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
+/**
+ *
+ */
 final class ViewRenderer
 {
+    /**
+     * @param ViewFactory $views
+     */
     public function __construct(private readonly ViewFactory $views)
     {
     }

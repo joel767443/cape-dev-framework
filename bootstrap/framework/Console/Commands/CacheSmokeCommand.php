@@ -2,24 +2,40 @@
 
 namespace WebApp\Console\Commands;
 
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
+/**
+ *
+ */
 final class CacheSmokeCommand extends Command
 {
+    /**
+     * @param CacheInterface $cache
+     */
     public function __construct(private readonly CacheInterface $cache)
     {
         parent::__construct('cache:smoke');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setDescription('Smoke test cache get/clear behavior.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws InvalidArgumentException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $key = 'smoke_' . date('YmdHis');

@@ -6,9 +6,16 @@ use Predis\Client as PredisClient;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use WebApp\Application;
 
+/**
+ *
+ */
 final class CacheFactory
 {
+    /**
+     * @return AdapterInterface
+     */
     public static function create(): AdapterInterface
     {
         $store = (string) config('cache.default', 'redis');
@@ -25,7 +32,7 @@ final class CacheFactory
 
         $path = (string) config('cache.stores.filesystem.path', 'bootstrap/cache');
         if ($path !== '' && $path[0] !== DIRECTORY_SEPARATOR && !preg_match('/^[A-Za-z]:[\\\\\\/]/', $path)) {
-            $path = rtrim((string) \WebApp\Application::$ROOT_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+            $path = rtrim(Application::$ROOT_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
         }
 
         return new FilesystemAdapter($prefix, $ttl, $path);

@@ -5,10 +5,15 @@ namespace WebApp\Container;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 
+/**
+ *
+ */
 final class ContainerFactory
 {
     /**
      * @param ServiceProviderInterface[] $providers
+     * @return ContainerInterface
+     * @throws \Exception
      */
     public static function build(array $providers = []): ContainerInterface
     {

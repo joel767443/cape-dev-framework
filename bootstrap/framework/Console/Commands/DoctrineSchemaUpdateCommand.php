@@ -9,13 +9,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ *
+ */
 final class DoctrineSchemaUpdateCommand extends Command
 {
+    /**
+     * @param EntityManagerInterface $em
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
         parent::__construct('doctrine:schema:update');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -24,6 +33,11 @@ final class DoctrineSchemaUpdateCommand extends Command
             ->addOption('force', null, InputOption::VALUE_NONE, 'Execute the SQL statements to update the schema');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dumpSql = (bool) $input->getOption('dump-sql');

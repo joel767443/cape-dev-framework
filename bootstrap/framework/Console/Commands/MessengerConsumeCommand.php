@@ -7,12 +7,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use Symfony\Component\Messenger\Worker;
 
+/**
+ *
+ */
 final class MessengerConsumeCommand extends Command
 {
+    /**
+     * @param ReceiverInterface $receiver
+     * @param MessageBusInterface $bus
+     * @param EventDispatcherInterface $events
+     */
     public function __construct(
         private readonly ReceiverInterface $receiver,
         private readonly MessageBusInterface $bus,
@@ -21,6 +30,9 @@ final class MessengerConsumeCommand extends Command
         parent::__construct('messenger:consume');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -28,6 +40,11 @@ final class MessengerConsumeCommand extends Command
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Max messages to handle', 10);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $limit = max(1, (int) $input->getOption('limit'));
@@ -36,7 +53,7 @@ final class MessengerConsumeCommand extends Command
 
         // Stop after N messages. This keeps it simple and CLI-friendly.
         $handled = 0;
-        $this->events->addListener(\Symfony\Component\Messenger\Event\WorkerMessageHandledEvent::class, function () use (&$handled, $limit, $worker): void {
+        $this->events->addListener(WorkerMessageHandledEvent::class, function () use (&$handled, $limit, $worker): void {
             $handled++;
             if ($handled >= $limit) {
                 $worker->stop();

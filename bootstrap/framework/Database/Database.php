@@ -38,6 +38,9 @@ class Database
         }
     }
 
+    /**
+     * @return PDO
+     */
     public function pdo(): PDO
     {
         return $this->pdo;
@@ -105,7 +108,7 @@ class Database
     {
         // Our schema bootstrap defines `users` (not `items`) as a core table.
         // Use it to detect whether initialization has already run.
-        if ($this->tableExists('users')) {
+        if ($this->tableExists()) {
             return;
         }
 
@@ -123,13 +126,12 @@ class Database
     }
 
     /**
-     * @param string $table
      * @return bool
      */
-    private function tableExists(string $table): bool
+    private function tableExists(): bool
     {
         $stmt = $this->pdo->prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = :name LIMIT 1");
-        $stmt->execute(['name' => $table]);
+        $stmt->execute(['name' => 'users']);
         return (bool) $stmt->fetchColumn();
     }
 

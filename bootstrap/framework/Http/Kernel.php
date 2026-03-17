@@ -2,6 +2,11 @@
 
 namespace WebApp\Http;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionNamedType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -20,6 +25,9 @@ use WebApp\Events\Http\ResponseReady;
 use WebApp\Validation\RequestValidator;
 use App\Requests\FormRequest;
 
+/**
+ *
+ */
 final class Kernel
 {
     /**
@@ -35,6 +43,10 @@ final class Kernel
     ) {
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function handle(Request $request): Response
     {
         $this->events?->dispatch(new RequestReceived($request));
@@ -104,8 +116,7 @@ final class Kernel
                 return function (Request $request) use ($class, $method): Response {
                     $instance = $this->container ? $this->container->get($class) : new $class();
                     $args = $this->resolveControllerArguments($instance, $method, $request);
-                    $response = $instance->{$method}(...$args);
-                    return $response;
+                    return $instance->{$method}(...$args);
                 };
             }
         }
@@ -115,8 +126,7 @@ final class Kernel
             return function (Request $request) use ($class, $method): Response {
                 $instance = $this->container ? $this->container->get($class) : new $class();
                 $args = $this->resolveControllerArguments($instance, $method, $request);
-                $response = $instance->{$method}(...$args);
-                return $response;
+                return $instance->{$method}(...$args);
             };
         }
 
@@ -142,6 +152,8 @@ final class Kernel
     /**
      * @param array<int, string|MiddlewareInterface> $list
      * @return array<int, MiddlewareInterface>
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     private function instantiateMiddlewareList(array $list): array
     {
@@ -164,13 +176,18 @@ final class Kernel
     }
 
     /**
+     * @param object $controller
+     * @param string $method
+     * @param Request $request
      * @return array<int, mixed>
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     private function resolveControllerArguments(object $controller, string $method, Request $request): array
     {
         try {
-            $ref = new \ReflectionMethod($controller, $method);
-        } catch (\ReflectionException) {
+            $ref = new ReflectionMethod($controller, $method);
+        } catch (ReflectionException) {
             // Fall back to the legacy signature.
             return [$request];
         }
@@ -178,7 +195,7 @@ final class Kernel
         $args = [];
         foreach ($ref->getParameters() as $param) {
             $type = $param->getType();
-            $typeName = $type instanceof \ReflectionNamedType ? $type->getName() : null;
+            $typeName = $type instanceof ReflectionNamedType ? $type->getName() : null;
 
             if ($typeName === Request::class || $typeName === 'Symfony\\Component\\HttpFoundation\\Request') {
                 $args[] = $request;

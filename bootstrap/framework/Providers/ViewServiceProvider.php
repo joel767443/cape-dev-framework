@@ -13,15 +13,25 @@ use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 use WebApp\Container\ServiceProviderInterface;
 use WebApp\View\ViewRenderer;
+use function DI\autowire;
+use function DI\create;
 
+/**
+ *
+ */
 final class ViewServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param ContainerBuilder $builder
+     * @return void
+     */
     public function register(ContainerBuilder $builder): void
     {
         $builder->addDefinitions([
-            Filesystem::class => \DI\create(Filesystem::class),
+            Filesystem::class => create(Filesystem::class),
 
             IlluminateContainer::class => \DI\factory(function (): IlluminateContainer {
                 return new IlluminateContainer();
@@ -34,7 +44,7 @@ final class ViewServiceProvider implements ServiceProviderInterface
             BladeCompiler::class => \DI\factory(function (Filesystem $files): BladeCompiler {
                 $compiled = (string) config('view.compiled');
                 if ($compiled === '') {
-                    throw new \RuntimeException('Missing config: view.compiled');
+                    throw new RuntimeException('Missing config: view.compiled');
                 }
 
                 return new BladeCompiler($files, $compiled);
@@ -49,7 +59,7 @@ final class ViewServiceProvider implements ServiceProviderInterface
             FileViewFinder::class => \DI\factory(function (Filesystem $files): FileViewFinder {
                 $paths = config('view.paths', []);
                 if (!is_array($paths) || $paths === []) {
-                    throw new \RuntimeException('Missing config: view.paths');
+                    throw new RuntimeException('Missing config: view.paths');
                 }
 
                 return new FileViewFinder($files, $paths);
@@ -64,10 +74,14 @@ final class ViewServiceProvider implements ServiceProviderInterface
                 }
             ),
 
-            ViewRenderer::class => \DI\autowire(ViewRenderer::class),
+            ViewRenderer::class => autowire(ViewRenderer::class),
         ]);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
     public function boot(ContainerInterface $container): void
     {
         // no-op

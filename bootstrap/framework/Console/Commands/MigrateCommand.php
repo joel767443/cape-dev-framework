@@ -6,14 +6,22 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use WebApp\Console\Support\Paths;
 use Illuminate\Database\ConnectionInterface;
 use WebApp\Database\Migrations\MigrationLoader;
 use WebApp\Database\Migrations\MigrationRepository;
 use WebApp\Database\Migrations\Migrator;
 
+/**
+ *
+ */
 final class MigrateCommand extends Command
 {
+    /**
+     * @param string $rootPath
+     * @param ConnectionInterface $db
+     */
     public function __construct(
         private readonly string $rootPath,
         private readonly ConnectionInterface $db
@@ -22,6 +30,9 @@ final class MigrateCommand extends Command
         parent::__construct('migrate');
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -29,6 +40,12 @@ final class MigrateCommand extends Command
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'List pending migrations without running them');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws Throwable
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dryRun = (bool) $input->getOption('dry-run');

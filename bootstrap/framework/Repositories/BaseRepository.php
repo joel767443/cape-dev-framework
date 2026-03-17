@@ -6,16 +6,24 @@
 
 namespace WebApp\Repositories;
 
+use InvalidArgumentException;
+use PDO;
 use WebApp\Database\Database;
 
+/**
+ *
+ */
 class BaseRepository
 {
     protected string $table;
 
+    /**
+     * @param string $table
+     */
     public function __construct(string $table)
     {
         if ($table === '') {
-            throw new \InvalidArgumentException("Table name is required.");
+            throw new InvalidArgumentException("Table name is required.");
         }
         $this->table = $table;
     }
@@ -74,7 +82,7 @@ class BaseRepository
 
         $db = new Database();
         $stmt = $db->query($sql, $params);
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $db->close();
 
         return $rows;
@@ -138,7 +146,7 @@ class BaseRepository
 
         // Keep this very strict; prevents accidental SQL injection.
         if (!preg_match('/^[A-Za-z0-9_]+(\\s+(ASC|DESC))?$/i', $orderBy)) {
-            throw new \InvalidArgumentException("Invalid orderBy value.");
+            throw new InvalidArgumentException("Invalid orderBy value.");
         }
 
         return " ORDER BY {$orderBy}";
@@ -154,14 +162,14 @@ class BaseRepository
         $sql = '';
 
         if ($limit !== null) {
-            $sql .= " LIMIT " . max(0, (int)$limit);
+            $sql .= " LIMIT " . max(0, $limit);
         }
         if ($offset !== null) {
             if ($limit === null) {
                 // SQLite requires LIMIT when OFFSET is present; use a very large limit.
                 $sql .= " LIMIT 9223372036854775807";
             }
-            $sql .= " OFFSET " . max(0, (int)$offset);
+            $sql .= " OFFSET " . max(0, $offset);
         }
 
         return $sql;
@@ -186,7 +194,7 @@ class BaseRepository
 
         foreach ($parameters as $column => $value) {
             if (!preg_match('/^[A-Za-z0-9_]+$/', (string)$column)) {
-                throw new \InvalidArgumentException("Invalid where column.");
+                throw new InvalidArgumentException("Invalid where column.");
             }
 
             if (is_array($value)) {

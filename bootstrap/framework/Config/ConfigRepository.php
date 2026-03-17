@@ -4,6 +4,9 @@ namespace WebApp\Config;
 
 use InvalidArgumentException;
 
+/**
+ *
+ */
 final class ConfigRepository
 {
     /**
@@ -14,7 +17,9 @@ final class ConfigRepository
     }
 
     /**
+     * @param string $key
      * @param mixed $default
+     * @return mixed
      */
     public function get(string $key, mixed $default = null): mixed
     {

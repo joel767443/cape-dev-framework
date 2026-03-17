@@ -4,8 +4,14 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use WebApp\Application;
 
+/**
+ *
+ */
 final class HttpKernelTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testJwtProtectedPingReturnsJson(): void
     {
         require_once __DIR__ . '/../autoload.php';

@@ -5,8 +5,14 @@ namespace App\Requests;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ *
+ */
 final class ValidateExampleRequest extends FormRequest
 {
+    /**
+     * @return Constraint|array
+     */
     public function constraints(): Constraint|array
     {
         return new Assert\Collection([

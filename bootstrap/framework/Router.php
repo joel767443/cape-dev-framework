@@ -83,11 +83,21 @@ class Router
         $this->add('POST', $path, $callback);
     }
 
+    /**
+     * @param string $path
+     * @param array $callback
+     * @return void
+     */
     public function put(string $path, array $callback): void
     {
         $this->add('PUT', $path, $callback);
     }
 
+    /**
+     * @param string $path
+     * @param array $callback
+     * @return void
+     */
     public function delete(string $path, array $callback): void
     {
         $this->add('DELETE', $path, $callback);
@@ -156,6 +166,11 @@ class Router
         $this->routes->add($routeName, $route);
     }
 
+    /**
+     * @param string $method
+     * @param string $path
+     * @return string
+     */
     protected function routeName(string $method, string $path): string
     {
         $method = strtolower($method);
@@ -171,6 +186,11 @@ class Router
         return $this->groupStack[count($this->groupStack) - 1];
     }
 
+    /**
+     * @param string $base
+     * @param string $append
+     * @return string
+     */
     protected function joinPath(string $base, string $append): string
     {
         $base = rtrim($base, '/');
@@ -184,6 +204,11 @@ class Router
         return $base . '/' . $append;
     }
 
+    /**
+     * @param string $base
+     * @param string $append
+     * @return string
+     */
     protected function joinName(string $base, string $append): string
     {
         $base = trim($base);
