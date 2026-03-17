@@ -1,5 +1,5 @@
 <script setup>
-const installSnippet = `composer create-project raccoon/framework my-app
+const installSnippet = `composer create-project cape-dev/framework my-app
 cd my-app
 php -S localhost:8000 -t public`
 </script>
@@ -9,7 +9,7 @@ php -S localhost:8000 -t public`
     <div class="row align-items-center g-4">
       <div class="col-12 col-lg-7">
         <div class="mb-3">
-          <span class="badge text-bg-dark">Raccoon PHP Framework</span>
+          <span class="badge text-bg-dark">cape-dev PHP Framework</span>
         </div>
 
         <h1 class="display-5 fw-semibold mb-3">

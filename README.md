@@ -1,4 +1,4 @@
-# Raccoon
+# cape-dev
 
 A lightweight full-stack CRUD application with a custom PHP MVC framework on the backend and a Vue 3 single-page application on the frontend. Manages a catalog of items with create, read, update, and delete operations.
 
@@ -39,15 +39,15 @@ A lightweight full-stack CRUD application with a custom PHP MVC framework on the
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:joel767443/Raccoon.git
-   cd Raccoon
+   git clone git@github.com:joel767443/cape-dev.git
+   cd cape-dev
    ```
 
 2. **Set up the database**
 
-   The backend will auto-create the SQLite database at `src/Database/raccoon.sqlite` on first run (and seed it with sample items).
+   The backend will auto-create the SQLite database at `src/Database/cape-dev.sqlite` on first run (and seed it with sample items).
 
-   To reset the database, delete `src/Database/raccoon.sqlite` and start the server again.
+   To reset the database, delete `src/Database/cape-dev.sqlite` and start the server again.
 
 3. **Configure the backend**
    ```bash
@@ -76,7 +76,7 @@ A lightweight full-stack CRUD application with a custom PHP MVC framework on the
 ## Project Structure
 
 ```
-Raccoon/
+cape-dev/
 ├── index.php              # Entry point and route definitions
 ├── autoload.php           # PSR-4 autoloader
 ├── config.sample.php      # Database config template

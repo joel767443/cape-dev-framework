@@ -9,9 +9,19 @@ namespace WebApp;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WebApp\Container\ContainerFactory;
+use WebApp\Config\ConfigLoader;
+use WebApp\Config\ConfigRepository;
+use WebApp\Config\Env;
 use WebApp\Http\Kernel;
-use WebApp\Http\Middleware\CorsMiddleware;
 use Psr\Container\ContainerInterface;
+use WebApp\Providers\HttpServiceProvider;
+use WebApp\Providers\RoutingServiceProvider;
+use WebApp\Providers\ValidationServiceProvider;
+use WebApp\Providers\LoggingServiceProvider;
+use WebApp\Http\Middleware\ExceptionHandlingMiddleware;
+use WebApp\Http\Middleware\MiddlewareRegistry;
+use WebApp\Http\Middleware\CorsMiddleware;
+use WebApp\Http\Middleware\ErrorLoggingMiddleware;
 
 /**
  * Class Application
@@ -36,17 +46,34 @@ class Application
     {
         self::$ROOT_PATH = $rootPath;
 
-        $this->container = ContainerFactory::build([]);
+        Env::load((string) $rootPath);
+
+        $configRepo = new ConfigRepository();
+        $configLoader = new ConfigLoader();
+        $configRepo->setMany($configLoader->loadDir((string) $rootPath . DIRECTORY_SEPARATOR . 'config'));
+        $GLOBALS['__webapp_config'] = $configRepo;
+
+        $this->container = ContainerFactory::build([
+            new HttpServiceProvider(),
+            new RoutingServiceProvider(),
+            new LoggingServiceProvider(),
+            new ValidationServiceProvider(),
+        ]);
 
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
         $this->router = new Router(new \WebApp\Http\Requests\Request(), new \WebApp\Http\Responses\Response());
+
         $this->kernel = new Kernel(
             $this->router->getRouteCollection(),
             [
-                new CorsMiddleware(),
+                // Keep ordering explicit: exception handling should wrap everything.
+                $this->container->get(ExceptionHandlingMiddleware::class),
+                $this->container->get(ErrorLoggingMiddleware::class),
+                $this->container->get(CorsMiddleware::class),
             ]
             ,
-            $this->container
+            $this->container,
+            $this->container->get(MiddlewareRegistry::class)
         );
     }
 
@@ -67,4 +94,5 @@ class Application
         $response = $this->handle($request);
         $response->send();
     }
+
 }

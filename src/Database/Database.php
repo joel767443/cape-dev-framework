@@ -43,18 +43,10 @@ class Database
      */
     private function resolveSqlitePath(): string
     {
-        // Default location: src/Database/raccoon.sqlite
-        $default = __DIR__ . DIRECTORY_SEPARATOR . 'raccoon.sqlite';
+        // Default location: src/Database/cape-dev.sqlite
+        $default = __DIR__ . DIRECTORY_SEPARATOR . 'cape-dev.sqlite';
 
-        // Optional override via config.php:
-        // return ['database' => ['sqlitePath' => 'src/Database/raccoon.sqlite']]
-        $configPath = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'config.php';
-        if (!is_file($configPath)) {
-            return $default;
-        }
-
-        $config = include($configPath);
-        $sqlitePath = $config['database']['sqlitePath'] ?? null;
+        $sqlitePath = config('database.sqlitePath');
         if (!$sqlitePath) {
             return $default;
         }

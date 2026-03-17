@@ -3,7 +3,6 @@
 namespace WebApp\Http;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -13,41 +12,24 @@ use WebApp\Http\Exception\HttpException;
 use WebApp\Http\Exception\NotFoundHttpException;
 use WebApp\Http\Middleware\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
+use WebApp\Http\Middleware\MiddlewareRegistry;
 
 final class Kernel
 {
     /**
-     * @param MiddlewareInterface[] $middleware
+     * @param MiddlewareInterface[] $globalMiddleware
      */
     public function __construct(
         private readonly RouteCollection $routes,
-        private readonly array $middleware = [],
-        private readonly ?ContainerInterface $container = null
+        private readonly array $globalMiddleware = [],
+        private readonly ?ContainerInterface $container = null,
+        private readonly ?MiddlewareRegistry $registry = null
     ) {
     }
 
     public function handle(Request $request): Response
     {
-        $core = function (Request $request): Response {
-            try {
-                return $this->dispatch($request);
-            } catch (\Throwable $e) {
-                return $this->renderException($e);
-            }
-        };
-
-        $pipeline = array_reduce(
-            array_reverse($this->middleware),
-            /**
-             * @param callable(Request): Response $next
-             */
-            function (callable $next, MiddlewareInterface $mw): callable {
-                return fn (Request $request): Response => $mw->process($request, $next);
-            },
-            $core
-        );
-
-        return $pipeline($request);
+        return $this->buildPipeline($this->globalMiddleware, fn (Request $r) => $this->dispatch($r))($request);
     }
 
     private function dispatch(Request $request): Response
@@ -67,6 +49,19 @@ final class Kernel
             }
         }
 
+        $routeMiddleware = $parameters['_middleware'] ?? [];
+        if (is_array($routeMiddleware) && $routeMiddleware !== []) {
+            return $this->buildPipeline(
+                $this->instantiateMiddlewareList($routeMiddleware),
+                fn (Request $r) => $this->dispatchController($parameters, $r)
+            )($request);
+        }
+
+        return $this->dispatchController($parameters, $request);
+    }
+
+    private function dispatchController(array $parameters, Request $request): Response
+    {
         $controller = $parameters['_controller'] ?? null;
         if ($controller === null) {
             throw new HttpException(500, 'Controller not configured');
@@ -114,29 +109,44 @@ final class Kernel
         return fn (): Response => throw new HttpException(500, 'Invalid controller');
     }
 
-    private function renderException(\Throwable $e): Response
+    /**
+     * @param array<int, MiddlewareInterface> $middleware
+     * @param callable(Request): Response $core
+     * @return callable(Request): Response
+     */
+    private function buildPipeline(array $middleware, callable $core): callable
     {
-        if ($e instanceof HttpException) {
-            return new JsonResponse(
-                [
-                    'success' => false,
-                    'code' => $e->statusCode,
-                    'message' => $e->getMessage(),
-                    'data' => $e->details,
-                ],
-                $e->statusCode
-            );
+        return array_reduce(
+            array_reverse($middleware),
+            function (callable $next, MiddlewareInterface $mw): callable {
+                return fn (Request $request): Response => $mw->process($request, $next);
+            },
+            $core
+        );
+    }
+
+    /**
+     * @param array<int, string|MiddlewareInterface> $list
+     * @return array<int, MiddlewareInterface>
+     */
+    private function instantiateMiddlewareList(array $list): array
+    {
+        $out = [];
+        foreach ($list as $mw) {
+            if ($mw instanceof MiddlewareInterface) {
+                $out[] = $mw;
+                continue;
+            }
+
+            if (!is_string($mw) || trim($mw) === '') {
+                throw new HttpException(500, 'Invalid middleware entry');
+            }
+
+            $class = $this->registry ? $this->registry->resolve($mw) : $mw;
+            $out[] = $this->container ? $this->container->get($class) : new $class();
         }
 
-        return new JsonResponse(
-            [
-                'success' => false,
-                'code' => 500,
-                'message' => 'Server Error',
-                'data' => [],
-            ],
-            500
-        );
+        return $out;
     }
 }
 
