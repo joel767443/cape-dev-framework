@@ -1,9 +1,6 @@
 <script setup>
 import config from '../config.js'
 
-const backendBaseUrl = String(config.apiBaseUrl || '').replace(/\/api\/?$/, '')
-const docsUrl = backendBaseUrl ? `${backendBaseUrl}/docs` : ''
-
 const installSnippet = `# backend
 composer install
 php -S localhost:8001 index.php
@@ -33,14 +30,7 @@ npm run dev`
 
         <div class="d-flex flex-wrap gap-2">
           <RouterLink class="btn btn-success btn-lg" to="/items">View CRUD demo</RouterLink>
-          <a
-            class="btn btn-outline-secondary btn-lg"
-            :href="docsUrl"
-            target="_blank"
-            rel="noreferrer"
-            :aria-disabled="!docsUrl"
-            :class="{ disabled: !docsUrl }"
-          >Read docs</a>
+          <RouterLink class="btn btn-outline-secondary btn-lg" to="/docs">Read docs</RouterLink>
         </div>
       </div>
 
