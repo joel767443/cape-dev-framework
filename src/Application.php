@@ -8,8 +8,10 @@ namespace WebApp;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WebApp\Container\ContainerFactory;
 use WebApp\Http\Kernel;
 use WebApp\Http\Middleware\CorsMiddleware;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class Application
@@ -25,6 +27,7 @@ class Application
      */
     public Router $router;
     private Kernel $kernel;
+    private ContainerInterface $container;
 
     /**
      * @param $rootPath
@@ -32,6 +35,9 @@ class Application
     public function __construct($rootPath)
     {
         self::$ROOT_PATH = $rootPath;
+
+        $this->container = ContainerFactory::build([]);
+
         // Keep Router API for route registration, but delegate handling to Http\Kernel.
         $this->router = new Router(new \WebApp\Http\Requests\Request(), new \WebApp\Http\Responses\Response());
         $this->kernel = new Kernel(
@@ -39,6 +45,8 @@ class Application
             [
                 new CorsMiddleware(),
             ]
+            ,
+            $this->container
         );
     }
 

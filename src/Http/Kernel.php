@@ -12,6 +12,7 @@ use Symfony\Component\Routing\RouteCollection;
 use WebApp\Http\Exception\HttpException;
 use WebApp\Http\Exception\NotFoundHttpException;
 use WebApp\Http\Middleware\MiddlewareInterface;
+use Psr\Container\ContainerInterface;
 
 final class Kernel
 {
@@ -20,7 +21,8 @@ final class Kernel
      */
     public function __construct(
         private readonly RouteCollection $routes,
-        private readonly array $middleware = []
+        private readonly array $middleware = [],
+        private readonly ?ContainerInterface $container = null
     ) {
     }
 
@@ -93,7 +95,7 @@ final class Kernel
             [$class, $method] = $controller;
             if (is_string($class) && is_string($method)) {
                 return function (Request $request) use ($class, $method): Response {
-                    $instance = new $class();
+                    $instance = $this->container ? $this->container->get($class) : new $class();
                     $response = $instance->{$method}($request);
                     return $response;
                 };
@@ -103,7 +105,7 @@ final class Kernel
         if (is_string($controller) && str_contains($controller, '::')) {
             [$class, $method] = explode('::', $controller, 2);
             return function (Request $request) use ($class, $method): Response {
-                $instance = new $class();
+                $instance = $this->container ? $this->container->get($class) : new $class();
                 $response = $instance->{$method}($request);
                 return $response;
             };
