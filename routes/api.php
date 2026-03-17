@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 use WebApp\Http\Controllers\AuthController;
 use WebApp\Http\Controllers\DocsController;
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace App\Messenger\Handlers;
 
 use App\Messenger\Messages\LogMessage;

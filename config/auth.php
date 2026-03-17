@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 return [
     'jwt' => [
         'secret' => getenv('JWT_SECRET') ?: (getenv('APP_KEY') ?: ''),

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 return [
     /**
      * Base paths where views live.

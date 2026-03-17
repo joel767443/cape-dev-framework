@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 return [
     'default' => getenv('QUEUE_CONNECTION') ?: 'redis',
 

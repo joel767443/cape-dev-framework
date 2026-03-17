@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 return [
     // Default store to use.
     'default' => getenv('CACHE_STORE') ?: 'redis',

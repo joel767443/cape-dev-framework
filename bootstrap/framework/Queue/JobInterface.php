@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace WebApp\Queue;
 
 use Psr\Container\ContainerInterface;

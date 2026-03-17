@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace App\Database\Migrations;
 
 use Illuminate\Database\ConnectionInterface;

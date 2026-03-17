@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace WebApp\Http\Middleware;
 
 use InvalidArgumentException;

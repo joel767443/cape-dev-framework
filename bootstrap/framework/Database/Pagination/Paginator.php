@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace WebApp\Database\Pagination;
 
 use Illuminate\Database\Query\Builder as QueryBuilder;

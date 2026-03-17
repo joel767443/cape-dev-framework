@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace App\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Model;

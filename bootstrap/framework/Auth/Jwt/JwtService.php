@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 namespace WebApp\Auth\Jwt;
 
 use Firebase\JWT\JWT;

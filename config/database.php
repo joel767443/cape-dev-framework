@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
 return [
     // Legacy key (kept for WebApp\Database\Database and compatibility)
     'sqlitePath' => getenv('DB_SQLITE_PATH') ?: null,
