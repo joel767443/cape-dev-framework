@@ -1,3 +1,9 @@
+.phpunit.result.cache
+
+# Compiled blade templates
+storage/framework/views/*
+!storage/framework/views/.gitkeep
+
 .idea
 config.php
 front-end/src/config.js
