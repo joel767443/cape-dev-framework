@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
+
 use WebApp\Application;
 use WebApp\Http\Controllers\ItemsController;
 header("Access-Control-Allow-Origin: *");

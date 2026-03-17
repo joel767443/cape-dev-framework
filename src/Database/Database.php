@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
+
 namespace WebApp\Database;
 use PDO;
 use PDOException;

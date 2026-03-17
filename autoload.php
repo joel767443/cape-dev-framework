@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
+
 spl_autoload_register(function (string $class_name): void {
 
     // Map the namespace to the src folder

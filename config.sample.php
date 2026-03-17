@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
+
 return [
     'database' => [
         // SQLite database file path.

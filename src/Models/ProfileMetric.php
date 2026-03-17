@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Yoweli Kachala <yowelikachala@gmail.com>
+ */
+
 namespace WebApp\Models;
 
 use WebApp\Http\Requests\BaseRequest;
