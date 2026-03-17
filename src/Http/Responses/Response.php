@@ -25,7 +25,7 @@ class Response
         $this->setStatusCode($code);
 
         return [
-            "success" => true,
+            "success" => $isSuccess,
             "code" => $code,
             "message" => $message,
             "data" => $data

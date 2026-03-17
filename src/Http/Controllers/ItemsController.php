@@ -69,7 +69,17 @@ class ItemsController
      */
     public function show(Request $request)
     {
-        return Item::find($_GET['id']);
+        $id = $_GET['id'] ?? null;
+        if ($id === null || !is_numeric($id)) {
+            return $this->response->jsonResponse("Invalid id.", 422, [], false);
+        }
+
+        $item = Item::find((int) $id);
+        if ($item === null) {
+            return $this->response->jsonResponse("Item not found.", 404, [], false);
+        }
+
+        return $item;
     }
 
     /**
@@ -98,9 +108,14 @@ class ItemsController
      */
     public function delete(): array
     {
-        if (Item::delete($_GET['id']) ) {
+        $id = $_GET['id'] ?? null;
+        if ($id === null || !is_numeric($id)) {
+            return $this->response->jsonResponse("Invalid id.", 422, [], false);
+        }
+
+        if (Item::delete((int) $id)) {
             return $this->response->jsonResponse("Item deleted.", 200, []);
         }
-        return $this->response->jsonResponse("Could not delete the item.", 200, []);
+        return $this->response->jsonResponse("Could not delete the item.", 500, [], false);
     }
 }

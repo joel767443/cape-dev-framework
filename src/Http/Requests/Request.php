@@ -50,8 +50,17 @@ class Request extends BaseRequest
         if ($this->method() === 'post') {
             $postData = json_decode(file_get_contents('php://input'), true);
             foreach (($postData ?? []) as $key => $value) {
-                $key === 'checked' ? $value = (int)$value : $value;
-                $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
+                // For JSON APIs, keep decoded scalar types intact (int/float/bool),
+                // and only sanitize strings.
+                if ($key === 'checked' && $value !== null) {
+                    $value = (int) $value;
+                }
+
+                if (is_string($value)) {
+                    $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
+                } else {
+                    $body[$key] = $value;
+                }
             }
         }
 
