@@ -5,7 +5,7 @@
       <h5>
         Items
         <div class="float-end">
-          <RouterLink class="btn btn-success btn-sm" to="/add-item">Add Item</RouterLink>
+          <RouterLink class="btn btn-success btn-sm" to="/items/new">Add Item</RouterLink>
         </div>
       </h5>
     </div>
@@ -31,7 +31,7 @@
         <td>{{ item.checked}}</td>
         <td>{{ item.price}}</td>
         <td>
-          <RouterLink class="btn btn-sm btn-success" :to="'items/' + item.id + '/edit'">Edit</RouterLink>
+          <RouterLink class="btn btn-sm btn-success" :to="'/items/' + item.id + '/edit'">Edit</RouterLink>
           &nbsp;
           <button class="btn btn-sm btn-danger" @click="deleteItem(item.id)" type="button">Delete</button>
         </td>

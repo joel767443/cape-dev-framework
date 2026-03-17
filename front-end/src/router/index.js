@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LandingView from '../views/LandingView.vue'
 import IndexView from '../views/items/IndexView.vue'
 import CreateView from '../views/items/CreateView.vue'
 import EditView from '../views/items/EditView.vue'
@@ -8,17 +9,22 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'landing',
+      component: LandingView
+    },
+    {
+      path: '/items',
       name: 'items',
       component: IndexView
     },
     {
-      path: '/add-item',
-      name: 'addItem',
+      path: '/items/new',
+      name: 'itemCreate',
       component: CreateView
     },
     {
       path: '/items/:id/edit',
-      name: 'add-item',
+      name: 'itemEdit',
       component: EditView
     },
   ]

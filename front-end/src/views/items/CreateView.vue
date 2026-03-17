@@ -3,7 +3,7 @@
     <div class="card-header">
       <h4>
         Add Item
-        <RouterLink to="/" class="btn float-end btn-success">Back</RouterLink>
+        <RouterLink to="/items" class="btn float-end btn-success">Back</RouterLink>
       </h4>
     </div>
     <div class="card-body">
