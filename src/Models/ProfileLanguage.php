@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class ProfileLanguage extends Model
 {
     protected static string $table = 'profile_languages';
@@ -13,8 +15,8 @@ class ProfileLanguage extends Model
     public function rules(): array
     {
         return [
-            'profile_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'language_name' => [self::RULE_REQUIRED, self::IS_STRING],
+            'profile_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'language_name' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
         ];
     }
 }

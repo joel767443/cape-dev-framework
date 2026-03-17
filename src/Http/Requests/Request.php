@@ -5,7 +5,7 @@ namespace WebApp\Http\Requests;
 /**
  * Class Request
  */
-class Request
+class Request extends BaseRequest
 {
     /**
      * @return string
@@ -45,7 +45,7 @@ class Request
 
         if ($this->method() === 'post') {
             $postData = json_decode(file_get_contents('php://input'), true);
-            foreach ($postData as $key => $value) {
+            foreach (($postData ?? []) as $key => $value) {
                 $key === 'checked' ? $value = (int)$value : $value;
                 $body[$key] = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
             }

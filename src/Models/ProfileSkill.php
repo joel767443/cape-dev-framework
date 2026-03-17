@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class ProfileSkill extends Model
 {
     protected static string $table = 'profile_skills';
@@ -14,9 +16,9 @@ class ProfileSkill extends Model
     public function rules(): array
     {
         return [
-            'profile_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'skill_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'is_top_skill' => [self::RULE_REQUIRED, self::IS_INT],
+            'profile_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'skill_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'is_top_skill' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
         ];
     }
 }

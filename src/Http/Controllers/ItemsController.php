@@ -44,14 +44,19 @@ class ItemsController
      */
     public function create(Request $request): array
     {
+        $data = $request->getBody();
         $item = new Item();
-        $item->loadData($request->getBody());
+        $item->loadData($data);
 
-        if ($item->validate() && $item->create()) {
-            return $this->response->jsonResponse("Item created.", 200, $request->getBody());
+        if (!$request->validate($item->rules(), $data)) {
+            return $this->response->jsonResponse("Item could not be created.", 422, $request->errors, false);
         }
 
-        return $this->response->jsonResponse("Item could not be created.", 500, $item->errors, false);
+        if ($item->create()) {
+            return $this->response->jsonResponse("Item created.", 200, $data);
+        }
+
+        return $this->response->jsonResponse("Item could not be created.", 500, [], false);
     }
 
     /**
@@ -69,14 +74,19 @@ class ItemsController
      */
     public function update(Request $request): array
     {
+        $data = $request->getBody();
         $item = new Item();
-        $item->loadData($request->getBody());
+        $item->loadData($data);
 
-        if ($item->validate() && $item->update($request->getBody())) {
-            return $this->response->jsonResponse("Item updated", 200, $request->getBody());
+        if (!$request->validate($item->rules(), $data)) {
+            return $this->response->jsonResponse("Could not update data", 422, $request->errors, false);
         }
 
-        return $this->response->jsonResponse("Could not update data", 403, $item->errors, false);
+        if (Item::update($data)) {
+            return $this->response->jsonResponse("Item updated", 200, $data);
+        }
+
+        return $this->response->jsonResponse("Could not update data", 403, [], false);
     }
 
     /**

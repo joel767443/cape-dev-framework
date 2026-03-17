@@ -17,25 +17,12 @@ abstract class Model
     protected static string $table = '';
 
     /**
-     * @var array
+     * @return string[]
      */
-    public array $errors = [];
-    /**
-     *
-     */
-    public const RULE_REQUIRED = 'required';
-    /**
-     *
-     */
-    public const IS_INT = 'is int';
-    /**
-     *
-     */
-    public const IS_FLOAT = 'is float';
-    /**
-     *
-     */
-    public const IS_STRING = 'is string';
+    protected function attributes(): array
+    {
+        return array_keys(get_object_vars($this));
+    }
 
     /**
      * @param $data
@@ -56,50 +43,18 @@ abstract class Model
     abstract public function rules(): array;
 
     /**
-     * @return bool
-     */
-    public function validate(): bool
-    {
-        foreach ($this->rules() as $attribute => $rules) {
-
-            $value = $this->$attribute;
-
-            foreach ($rules as $rule) {
-
-                $ruleName = $rule;
-
-                if (!is_string($ruleName)) {
-                    $ruleName = $rule[0];
-                }
-
-                if ($ruleName === self::RULE_REQUIRED && !$value) {
-                    $this->addError($attribute, self::RULE_REQUIRED);
-                }
-
-                if ($ruleName === self::IS_INT && !is_int($value)) {
-                    $this->addError($attribute, self::IS_INT);
-                }
-                if ($ruleName === self::IS_FLOAT && !is_float($value)) {
-                    $this->addError($attribute, self::IS_FLOAT);
-                }
-                if ($ruleName === self::IS_STRING && !is_string($value)) {
-                    $this->addError($attribute, self::IS_STRING);
-                }
-            }
-        }
-
-        return empty($this->errors);
-    }
-
-    /**
      * @return true
      */
     public function create()
     {
         $db = new Database();
-        $values = (array)$this;
-        unset($values["errors"]);
-        unset($values["id"]);
+        $values = [];
+        foreach ($this->attributes() as $attribute) {
+            if ($attribute === 'id') {
+                continue;
+            }
+            $values[$attribute] = $this->{$attribute} ?? null;
+        }
         foreach ($values as $key => $value) {
             if ($value === null) {
                 unset($values[$key]);
@@ -109,9 +64,9 @@ abstract class Model
         if ($table === '') {
             throw new \RuntimeException(static::class . " must define protected static string \$table");
         }
-        $db->create($table, $values);
+        $insertedId = $db->create($table, $values);
         $db->close();
-        return true;
+        return $insertedId;
     }
 
     /**
@@ -159,6 +114,9 @@ abstract class Model
         }
 
         if ($orderBy !== '') {
+            if (!preg_match('/^[A-Za-z0-9_]+(\\s+(ASC|DESC))?$/i', $orderBy)) {
+                throw new \InvalidArgumentException("Invalid orderBy value.");
+            }
             $sql .= " ORDER BY {$orderBy}";
         }
 
@@ -194,16 +152,30 @@ abstract class Model
         unset($data['id']);
         unset($data['errors']);
 
-        if (empty($data)) {
+        // Filter to known model attributes only (ignore unknown keys)
+        $instance = new static();
+        $allowed = array_flip($instance->attributes());
+        $filtered = [];
+        foreach ($data as $key => $value) {
+            if (!isset($allowed[$key])) {
+                continue;
+            }
+            if ($value === null) {
+                continue;
+            }
+            $filtered[$key] = $value;
+        }
+
+        if (empty($filtered)) {
             return true;
         }
 
         $setParts = [];
-        foreach ($data as $column => $value) {
+        foreach ($filtered as $column => $value) {
             $setParts[] = "{$column} = :{$column}";
         }
 
-        $params = $data;
+        $params = $filtered;
         $params['id'] = $id;
 
         $sql = "UPDATE {$table} SET " . implode(", ", $setParts) . " WHERE id = :id";
@@ -230,30 +202,5 @@ abstract class Model
         $db->query("DELETE FROM {$table} WHERE id = :id", ['id' => $id]);
         $db->close();
         return true;
-    }
-
-    /**
-     * @param string $attribute
-     * @param string $rule
-     * @return void
-     */
-    private function addError(string $attribute, string $rule)
-    {
-        $message = $this->errorMessages()[$rule] ?? '';
-
-        $this->errors[$attribute][] = $message;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function errorMessages(): array
-    {
-        return [
-            self::RULE_REQUIRED => 'This field is required.',
-            self::IS_INT => 'This field must be an integer.',
-            self::IS_FLOAT => 'This field must be a float.',
-            self::IS_STRING => 'This field must be a string.',
-        ];
     }
 }

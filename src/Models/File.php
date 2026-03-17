@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class File extends Model
 {
     protected static string $table = 'files';
@@ -14,9 +16,9 @@ class File extends Model
     public function rules(): array
     {
         return [
-            'filename' => [self::RULE_REQUIRED, self::IS_STRING],
-            'status' => [self::RULE_REQUIRED, self::IS_STRING],
-            'uploaded_at' => [self::RULE_REQUIRED, self::IS_STRING],
+            'filename' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
+            'status' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
+            'uploaded_at' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class Experience extends Model
 {
     protected static string $table = 'experiences';
@@ -18,9 +20,9 @@ class Experience extends Model
     public function rules(): array
     {
         return [
-            'profile_id' => [self::RULE_REQUIRED, self::IS_INT],
-            'role_title' => [self::RULE_REQUIRED, self::IS_STRING],
-            'is_current' => [self::RULE_REQUIRED, self::IS_INT],
+            'profile_id' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
+            'role_title' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
+            'is_current' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_INT],
         ];
     }
 }

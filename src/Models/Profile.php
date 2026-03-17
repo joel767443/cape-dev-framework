@@ -2,6 +2,8 @@
 
 namespace WebApp\Models;
 
+use WebApp\Http\Requests\BaseRequest;
+
 class Profile extends Model
 {
     protected static string $table = 'profiles';
@@ -18,7 +20,7 @@ class Profile extends Model
     public function rules(): array
     {
         return [
-            'email' => [self::RULE_REQUIRED, self::IS_STRING],
+            'email' => [BaseRequest::RULE_REQUIRED, BaseRequest::IS_STRING],
         ];
     }
 }
